@@ -15,7 +15,8 @@
 
 一个可以直接在浏览器运行的训练关卡原型，包含移动、射击、三把武器、三类机器人、评分结算与快速重开。
 
-- [打开 Demo](./04%20vertex-demo/index.html)
+- [在线试玩 Demo](https://3323098520.github.io/game-design-portfolio/04%20vertex-demo/)
+- [Demo 源码](./04%20vertex-demo/index.html)
 - [Demo 说明](./04%20vertex-demo/README.md)
 - [Demo 数值配置](./04%20vertex-demo/data/vertex-config.json)
 
