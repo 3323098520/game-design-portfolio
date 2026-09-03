@@ -6,15 +6,15 @@
     "targetTime": 210,
     "player": {
       "maxHp": 100,
-      "speed": 250,
-      "dashSpeed": 430,
+      "speed": 6.2,
+      "dashSpeed": 10.5,
       "dashCooldown": 2.4
     }
   },
   "weapons": [
-    {"id":"pistol","name":"手枪","key":"1","damage":34,"pellets":1,"fireRate":4.2,"magazine":12,"reload":1.1,"spread":0.025,"color":"#f4ce74"},
-    {"id":"rifle","name":"突击步枪","key":"2","damage":22,"pellets":1,"fireRate":10,"magazine":30,"reload":1.8,"spread":0.07,"color":"#77d4b1"},
-    {"id":"shotgun","name":"霰弹枪","key":"3","damage":10,"pellets":8,"fireRate":1.05,"magazine":6,"reload":2.2,"spread":0.34,"color":"#ee8b83"}
+    {"id":"pistol","name":"手枪","key":"1","damage":34,"pellets":1,"fireRate":4.2,"magazine":12,"reload":1.1,"spread":0.002,"color":"#f4ce74"},
+    {"id":"rifle","name":"突击步枪","key":"2","damage":22,"pellets":1,"fireRate":10,"magazine":30,"reload":1.8,"spread":0.012,"color":"#77d4b1"},
+    {"id":"shotgun","name":"霰弹枪","key":"3","damage":10,"pellets":8,"fireRate":1.05,"magazine":6,"reload":2.2,"spread":0.07,"color":"#ee8b83"}
   ],
   "enemies": [
     {"id":"patrol","name":"巡逻机器人","hp":60,"speed":58,"range":330,"damage":8,"cooldown":1.35,"color":"#7b92a8","reward":120},
