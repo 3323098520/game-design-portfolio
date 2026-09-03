@@ -11,6 +11,14 @@
 - [数值配置文件](./01%20PORTFOLIO_VERTEX/data/)
 - [教学递进图](./01%20PORTFOLIO_VERTEX/%E6%95%99%E5%AD%A6%E9%80%92%E8%BF%9B.png)
 
+## 04｜《顶点射手》可玩 Demo
+
+一个可以直接在浏览器运行的训练关卡原型，包含移动、射击、三把武器、三类机器人、评分结算与快速重开。
+
+- [打开 Demo](./04%20vertex-demo/index.html)
+- [Demo 说明](./04%20vertex-demo/README.md)
+- [Demo 数值配置](./04%20vertex-demo/data/vertex-config.json)
+
 ## 02｜《三角洲行动》烽火地带干员系统研究
 
 从撤离风险、三人小队职能缺口、代表干员与双模式平衡切入，分析干员技能如何进入搜集、交战与撤离决策。
