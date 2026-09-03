@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三角洲行动烽火地带干员系统研究</title>
+<style>
+@page { size: A4; margin: 16mm 15mm; }
+:root { --ink:#17251e; --muted:#617168; --paper:#f7f6f0; --line:#d7ddd2; --deep:#173d2e; --lime:#c8df70; --sand:#e6c66d; --soft:#eaf0e7; }
+* { box-sizing:border-box; } body { margin:0; background:#dce3da; color:var(--ink); font:16px/1.8 "Microsoft YaHei", "PingFang SC", sans-serif; }
+main { max-width:960px; margin:28px auto; background:var(--paper); padding:62px 76px 74px; box-shadow:0 16px 55px #24312622; }
+h1,h2,h3 { line-height:1.35; } h1 { font-size:38px; margin:0 0 9px; letter-spacing:.02em; } h2 { font-size:25px; margin:55px 0 18px; padding-top:10px; border-top:2px solid var(--deep); } h3 { font-size:18px; margin:28px 0 8px; }
+p { margin:12px 0; } a { color:#1b6a50; } .eyebrow { color:#53665b; font-size:14px; letter-spacing:.12em; } .subtitle { font-size:19px; color:#45584d; margin:0 0 28px; } .meta { font-size:14px; color:var(--muted); border-top:1px solid var(--line); padding-top:13px; }
+.thesis { margin:31px 0; padding:24px 28px; background:var(--deep); color:#fff; border-left:7px solid var(--lime); font-size:19px; line-height:1.75; }.thesis b { color:#e4f29f; }
+.question { display:grid; grid-template-columns:145px 1fr; gap:18px; padding:18px 0; border-bottom:1px solid var(--line); }.question b { color:var(--deep); }
+.flow { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:24px 0; }.flow div { padding:17px 12px; background:var(--soft); text-align:center; border-top:4px solid var(--deep); }.flow span { display:block; color:var(--muted); font-size:13px; }
+table { width:100%; border-collapse:collapse; margin:18px 0; font-size:14px; } th { text-align:left; background:#e1eadc; color:#193627; } th,td { padding:12px 11px; vertical-align:top; border-bottom:1px solid var(--line); } td:first-child { font-weight:700; white-space:nowrap; }
+.case { margin:26px 0; padding:23px 26px; border:1px solid #bbccb9; background:#fbfcf8; }.case h3 { margin-top:0; color:var(--deep); }.tag { display:inline-block; margin-right:7px; padding:2px 9px; background:#e7efd5; color:#456234; font-size:13px; border-radius:12px; }
+.model { margin:26px 0; padding:25px; background:#f0f3eb; border:1px solid var(--line); }.formula { padding:13px 16px; background:#fff; border-left:5px solid var(--sand); font-family:Consolas,monospace; font-size:15px; }.note { color:var(--muted); font-size:14px; }.closing { margin-top:42px; padding:25px 28px; background:#eee9d7; border-left:6px solid var(--sand); }
+.toc{margin:28px 0;padding:20px 24px;background:#edf1e9;columns:2}.toc a{display:block;text-decoration:none;margin:4px 0}.evidence{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.evidence>div{padding:18px;background:#fbfcf8;border:1px solid var(--line)}.evidence b{display:block;color:var(--deep);margin-bottom:5px}.operator{margin:22px 0;padding:20px 23px;background:#fff;border-left:5px solid var(--deep)}.operator h3{margin:0 0 9px}.operator small{color:var(--muted)}.bars{margin:24px 0}.bar{display:grid;grid-template-columns:95px 1fr;gap:12px;align-items:center;margin:9px 0}.track{height:18px;background:#e2e6df}.fill{height:100%;background:linear-gradient(90deg,var(--deep),#83a84b)}
+ul { padding-left:23px; } li { margin:6px 0; } section:last-of-type ul{font-size:13px;line-height:1.55;columns:2;column-gap:30px}section:last-of-type li{break-inside:avoid;margin:5px 0} @media print { body { background:#fff; } main { margin:0; box-shadow:none; max-width:none; padding:0; } h2 { break-after:avoid; } table,.case,.operator,.model,.evidence { break-inside:avoid; } } @media (max-width:700px) { main { margin:0; padding:34px 22px; } .flow { grid-template-columns:1fr 1fr; } .question { grid-template-columns:1fr; gap:4px; } h1 { font-size:29px; } section:last-of-type ul{columns:1} }
+</style>
+</head>
+<body><main>
+<div class="eyebrow">GAME SYSTEM RESEARCH · EXTRACTION SHOOTER</div>
+<h1>把干员技能看成一套撤离风险管理工具</h1>
+<p class="subtitle">《三角洲行动》烽火地带干员系统研究</p>
+<p class="meta">研究范围：三人小队、四类干员职能与搜集、交战、撤离循环。本文不讨论具体版本强度，也不做角色推荐。</p>
+
+<div class="thesis">中心命题：烽火地带的干员系统负责<b>把未知、受损、被追击这几类会让战利品归零的风险，转换成可以用技能和协作处理的问题</b>。四类职能给出了能力方向，具体技能组决定小队采用哪一种解法。</div>
+
+<nav class="toc"><a href="#model">01 模式约束与资源模型</a><a href="#roles">02 职能与技能的两层结构</a><a href="#cases">03 四名代表干员案例</a><a href="#squad">04 三人阵容的能力缺口</a><a href="#modes">05 双模式如何分开调平衡</a><a href="#balance">06 技能与枪战的边界</a><a href="#measure">07 可验证指标</a><a href="#conclusion">08 结论</a></nav>
+
+<section id="model"><h2>01 模式约束与资源模型</h2>
+<div class="question"><b>模式条件</b><span>官方资料将 Operations 描述为三人小队搜集物资并撤离的模式，同时提供四类干员职能。</span></div>
+<div class="question"><b>设计矛盾</b><span>一队只有三人，却面对信息、突破、续航、控路四种能力需求。队伍必然缺一块，选人就是在决定哪种风险要靠操作、装备或路线来补。</span></div>
+<div class="question"><b>分析问题</b><span>为什么同样是“技能”，它在撤离射击里不能只按伤害和冷却衡量？</span></div>
+<div class="flow"><div>搜集<span>不确定性最高</span></div><div>转点<span>路线暴露上升</span></div><div>接战<span>状态与位置被改写</span></div><div>撤离<span>收益等待兑现</span></div></div>
+<p>团队竞技里，死亡的主要后果是少一个人和一次比分损失。烽火地带多了一层后果：已经带在身上的物资会随失败归零。于是技能的价值要回到整局收益上看。一次扫描、烟雾、治疗或封锁，未必给使用者带来击杀，却可能让队伍保住继续走到撤离点的资格。</p></section>
+
+<section id="roles"><h2>02 职能负责分工，技能负责落地</h2>
+<p>把“突击、侦察、支援、工程”直接当成分析终点，会把干员系统看扁。它们更像技能组的分类标签。玩家进场时选择的是某名具体干员，选中的也是这一组工具能够在什么时刻、以什么代价改变队伍状态。</p>
+<table><thead><tr><th>干员职能</th><th>技能通常处理的变量</th><th>对撤离收益的影响</th><th>小队需要回答的问题</th></tr></thead><tbody>
+<tr><td>侦察</td><td>敌人位置、路径安全性、信息时效</td><td>减少无准备接战，避免把高价值物资带进伏击区</td><td>信息能否早到，早到后能否改变路线？</td></tr>
+<tr><td>突击</td><td>首轮交火距离、推进窗口、火力压制</td><td>将已经确认的信息换成短暂的先手，缩短暴露时间</td><td>打开窗口后，队友能否同步进入？</td></tr>
+<tr><td>支援</td><td>血量、状态、视野遮蔽、救援空间</td><td>把一次受损交火从“被迫撤”拉回“仍可选择”</td><td>恢复后是继续搜，还是立刻转撤？</td></tr>
+<tr><td>工程</td><td>通道、追击速度、区域停留成本</td><td>让追击方付出时间和路线代价，给小队制造脱离窗口</td><td>控制工具要留给进点，还是留给撤离？</td></tr>
+</tbody></table>
+<div class="model"><b>一个更适合撤离模式的技能价值模型</b><div class="formula">技能价值 ≈ 降低的失败概率 × 当前携带收益 + 争取到的行动时间 × 队伍转化能力</div><p class="note">这不是游戏内数值公式。它用于帮助策划判断：同一枚烟雾在空背包开局和满背包撤离前，为什么值得的资源价格不同。</p></div></section>
+
+<section id="cases"><h2>03 四名代表干员：同一职能下的价值也不相同</h2>
+<p>为了避免把职能标签当成答案，我选了四名早期代表干员。这里不排强度，只看技能如何改变小队的决策。技能名称和模式差异以官方页面及公告为准。</p>
+
+<div class="operator"><h3>红狼 D-wolf：把首杀变成继续推进的许可</h3><small>突击职能 | 动力外骨骼、三联装手炮、突破型烟雾弹、战术滑铲</small><p>红狼的设计不是单纯加速。动力外骨骼把移动和射速放进一个短爆发窗口，击倒敌人后还能恢复生命与体力并延长状态。这个结构鼓励玩家主动寻找第一名目标，因为第一次击倒会降低继续压进的成本。三联装手炮与短烟则分别处理掩体后目标和视线切割。</p><p><b>风险：</b>一旦击杀刷新和自我恢复过强，突击干员会同时拿走突破、续航和收割三种价值。官方对战术道具挤压枪战的担忧，在这类滚雪球技能上尤其敏感。</p></div>
+
+<div class="operator"><h3>露娜 Luna：信息有明确的行动期限</h3><small>侦察职能 | 探测箭矢及电击类工具</small><p>露娜把侦察做成了有路径、有落点的投射物。信息不会平白出现，使用者要先选择角度、反弹和覆盖范围。官方后续曾分别调整其在全面战场和烽火地带的效果，包括探测载具、缩短烽火地带冷却，以及让被探测目标的治疗物品冷却受到影响。</p><p>侦察技能可以跨过“看见敌人”这一层，进一步改变对手恢复和重新接战的时间。设计重点也随之变化：标记持续多久、敌人是否知道自己暴露、信息能否被队友及时消费，比扫描范围本身更值得关注。</p></div>
+
+<div class="operator"><h3>蜂医 Stinger：把战后状态拉回可撤离线</h3><small>支援职能 | 蜂医科技手枪、治疗烟雾</small><p>蜂医的治疗工具在交火结束后价值最清楚。队伍打赢一波但人人残血时，下一支小队或撤离点埋伏才是最大的威胁。官方曾把烽火地带治疗效果的持续时间从 20 秒提高到 60 秒，后续又让初始的一发治疗弹直接上膛，减少开局紧急情况中的操作延迟。</p><p>这些调整处理的是两个具体问题：紧急时能否马上使用，以及治疗能否覆盖下一段行动。支援的反馈如果只做成血条上涨，很容易被低估；它实际买回的是路线选择权。</p></div>
+
+<div class="operator"><h3>牧羊人 Shepherd：用部署物给追击方增加时间成本</h3><small>工程职能 | 声波陷阱、爆破与区域工具</small><p>工程干员最适合处理狭窄出口和撤离前的反追击。官方对牧羊人声波陷阱的存在距离，以及烽火地带手雷冷却做过调整。这两个参数指向两种不同价值：一个决定部署后能离开多远，另一个决定一局中能否再次用来清点或阻断。</p><p>工程技能的强度不宜只看伤害。让敌人停一下、绕一步或先打掉装置，往往已经足够让携带物资的一方拉开距离。它出售的是时间。</p></div>
+
+<table><thead><tr><th>代表干员</th><th>主要资源</th><th>最强价值阶段</th><th>容易越界的方向</th></tr></thead><tbody><tr><td>红狼</td><td>进攻窗口</td><td>接战与追击</td><td>击杀刷新带来过强滚雪球</td></tr><tr><td>露娜</td><td>信息时效</td><td>进楼与转点</td><td>低成本完整暴露敌方</td></tr><tr><td>蜂医</td><td>可行动状态</td><td>战后与撤离</td><td>恢复过快抵消交火损耗</td></tr><tr><td>牧羊人</td><td>通道时间</td><td>守点与脱离</td><td>部署物过多使枪线不可读</td></tr></tbody></table>
+</section>
+
+<section><h2>一个具体局面：经过开阔地去撤离</h2>
+<div class="case"><span class="tag">假设局面</span><span class="tag">中等价值战利品</span><span class="tag">前方视野不完整</span><h3>队伍已经搜完一栋建筑，撤离点前有一段开阔地</h3><p>最危险的动作是三个人同时为了确认敌人而暴露。侦察技能先把问题从“要不要跑过去”缩成“右侧掩体和高点谁在看”；控路或烟雾工具再决定队伍能否切开一条短路线；若仍需交火，突击技能负责把那几秒钟的窗口转成前压或反打；支援技能处理的则是交火后谁还能走。</p><p>这段过程没有固定的技能顺序。小队用不同干员的工具连续降低同一个风险：<b>带着物资穿过危险区域。</b></p></div>
+<p>因此，干员之间的协同不应只用“技能能不能连招”衡量。更实用的判断是：前一个技能产生的信息、空间或状态，能否被下一个技能和队友的行动接住。扫描后没人改变站位，烟雾后没人过点，治疗后队伍仍在原地犹豫，都会让技能变成一次没有被转化的消耗。</p></section>
+
+<section id="squad"><h2>04 三人选四类，缺口本身就是策略</h2>
+<table><thead><tr><th>本局风险</th><th>优先需要的干员能力</th><th>必须接受的代价</th></tr></thead><tbody>
+<tr><td>高价值物资，路线陌生</td><td>侦察和续航</td><td>缺少强行抢首杀的能力，需要少打无把握交火</td></tr>
+<tr><td>要争夺一个已知的高价值区域</td><td>信息、突破和控路</td><td>续航不足时，交火后更应尽快收缩或撤离</td></tr>
+<tr><td>装备一般，只求稳撤</td><td>信息、遮蔽和延缓追击</td><td>正面接战能力弱，路线判断必须更早完成</td></tr>
+<tr><td>撤离路线狭窄，容易被堵</td><td>控路、恢复和短距突破</td><td>远距离信息不足时，要为试探和绕行留出时间</td></tr>
+</tbody></table>
+<p>这里没有万能三人组。若存在一个能同时稳定给信息、开路、回复和守侧翼的干员，阵容选择就会收敛，其他干员只会沦为替代品。三人小队配四类职能的意义，正是逼玩家在进场前把“我不想失去什么”说清楚。</p></section>
+
+<section id="modes"><h2>05 同一名干员，为什么要按模式分开调</h2>
+<p>三角洲的干员横跨烽火地带和全面战场。两种模式共享角色认知，却有不同的死亡成本、交战密度和补给节奏。官方补丁多次为同一技能设置模式专属效果，这是干员系统里最值得研究的一层。</p>
+<table><thead><tr><th>差异</th><th>烽火地带</th><th>全面战场</th><th>对技能设计的要求</th></tr></thead><tbody><tr><td>死亡成本</td><td>装备和本局物资可能损失</td><td>可重生，单次死亡成本较低</td><td>烽火技能更要防止无反应的处决</td></tr><tr><td>交战密度</td><td>遭遇不连续，主动规避有价值</td><td>前线持续交火</td><td>全面战场可允许更高频率的区域工具</td></tr><tr><td>信息价值</td><td>一次暴露可能决定整队是否接战</td><td>信息快速过期，前线持续变化</td><td>烽火的扫描范围、时长和冷却需要更谨慎</td></tr><tr><td>续航意义</td><td>决定能否继续搜和安全撤离</td><td>维持前线站位与连续推进</td><td>同一治疗技能不应只换一个数字</td></tr></tbody></table>
+<div class="evidence"><div><b>露娜的模式差异</b>官方曾让探测箭在全面战场增加载具探测，而烽火地带调整冷却并影响被探测者的治疗物品。两个模式复用了“侦察”主题，却服务不同目标。</div><div><b>威龙的模式差异</b>官方曾指出威龙在烽火地带全地图表现超出其他干员，因而单独上调该模式的推进技能冷却，避免改动破坏另一模式的循环。</div></div>
+</section>
+
+<section id="balance"><h2>06 系统需要守住的两条边界</h2>
+<h3>信息必须让人做选择，不能替人把选择做完</h3><p>侦察技能若低成本、长时间、完整地揭示敌方位置，交火会从判断和反应变成执行既定答案。更健康的信息技能应该有时效、范围或暴露代价，让拿到信息的一方仍要决定何时进、从哪里进。</p>
+<h3>辅助贡献必须能被小队感知</h3><p>击杀最容易被看见，撤离前的恢复、有效封路和提前预警却容易消失在结算里。若产品只强化击杀反馈，玩家会更偏向带来即时正反馈的技能。结算可以记录有效预警、恢复量、撤离前的控制时长等辅助事件，但不必把它们简单做成“谁最高谁最强”的排名。</p>
+<p>2026 年 7 月的官方平衡说明直接提到三个问题：主动交火中的战术道具过多、信息暴露过于容易、战术工具给枪战留下的空间不足。这段说明证明干员平衡不能只看胜率。技能是否让交火仍然清楚、公平、可反应，也是系统指标。</p></section>
+
+<section id="measure"><h2>07 如果由我验证，会看哪些数据</h2>
+<table><thead><tr><th>要验证的问题</th><th>建议指标</th><th>异常信号</th></tr></thead><tbody><tr><td>信息是否太完整</td><td>被扫描后 10 秒内接战率、击倒率、技能规避率</td><td>扫描几乎自动转化为击倒</td></tr><tr><td>突击是否挤压其他职能</td><td>首杀后连续击倒率、单人脱离成功率、阵容选择率</td><td>突击同时拥有最强突破和最高生还</td></tr><tr><td>支援贡献是否可感知</td><td>治疗后撤离率、战后继续行动时长、队友评价</td><td>数据有效但玩家仍认为“没作用”</td></tr><tr><td>工程是否造成不可读交火</td><td>部署物密度、被工具连续控制时长、绕行时间</td><td>玩家进入区域后没有可反应路径</td></tr><tr><td>三人阵容是否有真实取舍</td><td>组合多样性、缺失职能分布、地图间阵容差异</td><td>一个固定组合覆盖绝大多数地图和难度</td></tr></tbody></table>
+<p>这些指标需要真实对局日志才能计算。本文只提出验证方案，不把它们写成已经得到的数据。</p></section>
+
+<section id="conclusion"><h2>08 结论</h2><div class="closing"><b>干员系统把撤离风险分配给不同角色和技能组。</b><br>职能决定小队缺什么，技能决定缺口如何被补救。它把“能不能打赢”之外的疑问搬进了选人和对局过程：要不要进这栋楼，受伤后还值不值得继续搜，撤离前的技能要不要留。不同干员需要对这些问题给出不同答案，选人才会进入搜打撤策略。</div></section>
+
+<section><h2>资料与分析边界</h2><p>三人小队、四类职能、搜集物资和安全撤离等模式事实来自官方资料。全文的模型、假设局面与设计判断为个人系统分析，不代表官方数值或当前版本强度。版本信息核对截止 2026 年 9 月 3 日。</p><ul><li><a href="https://deltaforce.garena.com/">Delta Force 官方站：Operations 模式、干员与撤离说明</a></li><li><a href="https://deltaforce.garena.com/en/news/announcement/TZB3DE">Delta Force 官方公告：Warfare 与 Operations 基础介绍</a></li><li><a href="https://deltaforce.garena.com/en/news/all/A7WYBP">2026-07-10 官方干员平衡说明：战术道具、信息与枪战空间</a></li><li><a href="https://deltaforce.garena.com/en/news/announcement/H3T8DS">Starfall 官方更新：红狼、蜂医、露娜等模式专属调整</a></li><li><a href="https://deltaforce.garena.com/en/news/announcement/V6J38U">官方赛季公告：威龙在烽火地带的模式专属调整</a></li><li><a href="https://deltaforce.garena.com/en/news/announcement/W9PGYU">官方赛季公告：侦察与支援干员调整说明</a></li></ul></section>
+</main></body></html>

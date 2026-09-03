@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>VALORANT 英雄技能系统研究</title>
+<style>
+@page { size:A4; margin:16mm 15mm; } :root{--ink:#202034;--muted:#67677b;--paper:#faf8f5;--line:#ded9d7;--wine:#8d3147;--rose:#e8919f;--lav:#ece4ee;--soft:#f2eef1;--gold:#d1a45b}*{box-sizing:border-box}body{margin:0;background:#e8e0e3;color:var(--ink);font:16px/1.8 "Microsoft YaHei","PingFang SC",sans-serif}main{max-width:960px;margin:28px auto;background:var(--paper);padding:62px 76px 74px;box-shadow:0 16px 55px #43233122}h1,h2,h3{line-height:1.35}h1{font-size:38px;margin:0 0 9px;letter-spacing:.02em}h2{font-size:25px;margin:55px 0 18px;padding-top:10px;border-top:2px solid var(--wine)}h3{font-size:18px;margin:28px 0 8px}p{margin:12px 0}a{color:#81314a}.eyebrow{color:#765765;font-size:14px;letter-spacing:.12em}.subtitle{font-size:19px;color:#5e4751;margin:0 0 28px}.meta{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:13px}.thesis{margin:31px 0;padding:24px 28px;background:var(--wine);color:#fff;border-left:7px solid var(--rose);font-size:19px;line-height:1.75}.thesis b{color:#ffe1df}.question{display:grid;grid-template-columns:145px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}.question b{color:var(--wine)}.chain{display:flex;align-items:stretch;gap:0;margin:25px 0;overflow:hidden;border:1px solid #d9c4cb}.chain div{flex:1;padding:17px 12px;text-align:center;background:#f5edef;border-right:1px solid #d9c4cb}.chain div:last-child{border:0}.chain b{display:block;color:var(--wine)}.chain span{display:block;color:var(--muted);font-size:13px}table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}th{text-align:left;background:#eadde2;color:#56293a}th,td{padding:12px 11px;vertical-align:top;border-bottom:1px solid var(--line)}td:first-child{font-weight:700;white-space:nowrap}.case{margin:26px 0;padding:23px 26px;border:1px solid #d9c4cb;background:#fffafb}.case h3{margin-top:0;color:var(--wine)}.tag{display:inline-block;margin-right:7px;padding:2px 9px;background:#f3e1e5;color:#854255;font-size:13px;border-radius:12px}.model{margin:26px 0;padding:25px;background:var(--soft);border:1px solid var(--line)}.formula{padding:13px 16px;background:#fff;border-left:5px solid var(--gold);font-family:Consolas,monospace;font-size:15px}.note{color:var(--muted);font-size:14px}.closing{margin-top:42px;padding:25px 28px;background:#eee1df;border-left:6px solid var(--rose)}ul{padding-left:23px}li{margin:6px 0}@media print{body{background:#fff}main{margin:0;box-shadow:none;max-width:none;padding:0}h2{break-after:avoid}table,.case{break-inside:avoid}}@media(max-width:700px){main{margin:0;padding:34px 22px}.chain{display:grid;grid-template-columns:1fr 1fr}.question{grid-template-columns:1fr;gap:4px}h1{font-size:29px}}
+.toc{margin:28px 0;padding:20px 24px;background:#f1e8eb;columns:2}.toc a{display:block;text-decoration:none;margin:4px 0}.agent{margin:22px 0;padding:20px 23px;background:#fff;border-left:5px solid var(--wine)}.agent h3{margin:0 0 9px}.agent small{color:var(--muted)}.cycle{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:22px 0}.cycle div{text-align:center;padding:18px 8px;background:#f2e7ea;border-top:4px solid var(--wine)}.cycle b{display:block;color:var(--wine)}.evidence{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.evidence>div{padding:18px;background:#fffafb;border:1px solid var(--line)}.evidence b{display:block;color:var(--wine);margin-bottom:5px}
+section:last-of-type ul{font-size:13px;line-height:1.55;columns:2;column-gap:30px}section:last-of-type li{break-inside:avoid;margin:5px 0}@media print{.agent,.model,.evidence{break-inside:avoid}}@media(max-width:700px){section:last-of-type ul{columns:1}}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">GAME SYSTEM RESEARCH · TACTICAL SHOOTER</div>
+<h1>英雄技能如何改变一回合的交战条件</h1>
+<p class="subtitle">《VALORANT》英雄技能系统研究</p>
+<p class="meta">研究范围：爆破模式下的英雄职能、技能资源与进点协作。本文不讨论英雄强度、具体地图优劣或当前阵容推荐。</p>
+
+<div class="thesis">中心命题：VALORANT 把 MOBA 式的英雄技能放进单局一命的战术射击里。技能把<b>“我是否看得到、走不走得过去、什么时候一起动”变成需要投入资源的回合条件</b>。枪法仍决定最后的击杀，技能决定那次对枪发生在谁更舒服的条件下。</div>
+
+<nav class="toc"><a href="#cycle">01 Riot 的 Tac Cycle</a><a href="#roles">02 四类英雄的注意力分工</a><a href="#cases">03 四名英雄案例</a><a href="#entry">04 一次进点怎样被组织</a><a href="#balance">05 平衡改动透露的边界</a><a href="#cs">06 与 CS 投掷物系统的差异</a><a href="#measure">07 如何验证技能价值</a><a href="#conclusion">08 结论</a></nav>
+
+<section id="cycle"><h2>01 Riot 已经给出了底层循环</h2>
+<div class="question"><b>模式条件</b><span>官方将 VALORANT 定义为以枪战为核心、由英雄技能创造机会的 5v5 战术射击。爆破回合中每人一命，失误很难靠复活修正。</span></div>
+<div class="question"><b>常见误读</b><span>把技能看成“多一种输出方式”。这会解释不了烟、侦查、陷阱、位移和治疗为什么能长期占据战术核心。</span></div>
+<div class="question"><b>分析问题</b><span>英雄技能如何在不接管击杀判定的前提下，让同一张地图、同一把枪打出不同的回合节奏？</span></div>
+<div class="chain"><div><b>信息</b><span>谁在什么位置</span></div><div><b>空间</b><span>哪些角度可走</span></div><div><b>节奏</b><span>何时一起动</span></div><div><b>枪战</b><span>谁能把窗口兑现</span></div></div>
+<p>Riot 在《How we balance VALORANT》中把 Tac Cycle 写成 Intel、Plan、Execute、Repeat。信息阶段确认对手、地盘、双方技能与武器；计划阶段决定如何使用这些信息；执行阶段同时包含时机、技能和射击。官方甚至写得很直白：技能负责降低计划风险，射击负责结束交火。</p>
+<div class="cycle"><div><b>Intel</b>对手、地盘、资源</div><div><b>Plan</b>选择路线与工具</div><div><b>Execute</b>技能、时机、射击</div><div><b>Repeat</b>读懂结果再调整</div></div>
+<p>技能并不会把一场对枪的结果直接交给使用者。它先改变对枪之前的条件：让一个角落必须被回应，让一条长枪线暂时失效，或让队友能够在同一个两秒窗口里进入包点。英雄系统的差异从这里开始。</p></section>
+
+<section id="roles"><h2>02 四类英雄，分的是回合里的注意力</h2>
+<p>官方将英雄分为决斗者、先锋、控场者和哨卫。四类职能给五人队伍分配了不同的注意力负担：谁去确认，谁去切线，谁承担首战，谁负责已经拿到的空间不被偷回。</p>
+<table><thead><tr><th>英雄职能</th><th>主要改变什么</th><th>典型回合贡献</th><th>技能失去转化时会发生什么</th></tr></thead><tbody>
+<tr><td>先锋</td><td>信息与近点压力</td><td>探测、致盲、震荡，让防守方暴露、后退或交出反制</td><td>拿到信息后没人跟进，或控制效果结束后才开始推进</td></tr>
+<tr><td>控场者</td><td>视野和路线价值</td><td>用烟、墙和区域工具把防守视野从多个角度压成少数角度</td><td>烟遮住了敌人，也切断了自己人的后续信息和补枪线</td></tr>
+<tr><td>决斗者</td><td>第一处空间与首轮交火</td><td>在短窗口内进场、吃掉第一波风险、让队友有落脚点</td><td>单人先进入，队友技能和补枪没有到位</td></tr>
+<tr><td>哨卫</td><td>侧翼信息、据点维持和延缓</td><td>用布设工具守住背后、拖慢回防或把已占空间变成可守空间</td><td>进攻队全部向前压，后方被绕或下包后没有残局结构</td></tr>
+</tbody></table>
+<p>这套分工把“谁枪法最好”之外的工作拆开了。尤其是先锋和控场者，它们的价值往往出现在击杀前。官方对先锋的描述也强调开角和为队友创造机会，对哨卫的平衡目标则明确提到约束低信息的五人抱团进攻。</p></section>
+
+<section id="cases"><h2>03 四名英雄：技能怎样改写回合条件</h2>
+<p>这里选四名早期英雄，不做强度排名。每名英雄分别代表一类职能，也对应 Tac Cycle 中一段容易被观察的工作。</p>
+<div class="agent"><h3>Sova：把“这里可能有人”压缩成有限的清点范围</h3><small>先锋 | 侦察箭、无人机与远程打击</small><p>Sova 的侦察工具从标记开始，随后影响防守方的选择。侦察箭会逼防守方决定是否开枪暴露位置，无人机则让使用者暂时放弃持枪，换取更细的信息。队伍因此得到两种行动依据：确认某个角落有人，或确认几个关键角落暂时没人。</p><p>无人机期间本体不能正常对枪，箭矢有飞行路径和落点，敌人能够破坏或躲避。先锋减少了需要硬猜的角度，却没有取消清点和补枪。</p></div>
+<div class="agent"><h3>Omen：烟雾购买的是枪线数量</h3><small>控场者 | Dark Cover、Paranoia 与位移</small><p>一个包点可能同时存在远点、侧面和高低差枪线。Omen 的烟雾把其中一两条暂时拿出交火列表，队伍可以先处理剩下的角度。Paranoia 则把一条路径上的敌人压进短暂劣势，给队友一个共同进场时间。</p><p>官方长期围绕烟雾冷却、成本、飞行速度与单向烟位置调整 Omen。9.10 版本取消了借小型装饰物制造部分单向烟的方式，理由是这种防守收益缺少足够反制。覆盖面积之外，控场技能还要防止某条枪线变成单方面答案。</p></div>
+<div class="agent"><h3>Jett：位移的价值在进场，不应成为无限后悔权</h3><small>决斗者 | Tailwind、Cloudburst 与垂直机动</small><p>Jett 能先穿过危险入口，再用短烟给自己争取落点。她把队伍不愿承担的第一波风险集中到一个高机动角色身上。这也解释了为什么位移技能很容易越界：同一技能既能主动进点，也能在架枪失败后撤回安全区。</p><p>4.08 版本给 Tailwind 增加预激活和有限使用窗口；7.04 又把窗口从 12 秒缩到 7.5 秒，并增加启动时间。官方目的很清楚：保留主动破点，减少被抓后反应式撤销错误。决斗者可以买进攻窗口，但不应长期持有一次免费的战术后悔。</p></div>
+<div class="agent"><h3>Cypher：一根绊线出售的是注意力</h3><small>哨卫 | Trapwire、Spycam、Cyber Cage</small><p>绊线不一定抓到人。只要它守住一条侧翼，进攻方就能把更多准星和视线放在正面。对手若打掉它，队伍又得到一条“这里有人经过”的信息。Cypher 的布设工具把持续盯防交给系统，换回玩家的注意力。</p><p>11.08 版本为摄像头增加近距离视觉和声音提示，提高被摧毁后的冷却，并降低绊线的致死性。这个方向保留了监控网络，却给闯入者更清楚的发现和处理机会。哨卫应当迫使对手慢下来，而不是让踩中装置直接等同于死亡。</p></div>
+<table><thead><tr><th>英雄</th><th>Tac Cycle 位置</th><th>提供的条件</th><th>必须保留的代价</th></tr></thead><tbody><tr><td>Sova</td><td>Intel</td><td>减少未知角度</td><td>工具可躲、可打，使用者暂时失去持枪</td></tr><tr><td>Omen</td><td>Plan / Execute</td><td>减少同时面对的枪线</td><td>烟有时限，也会切断己方信息</td></tr><tr><td>Jett</td><td>Execute</td><td>把首波风险转成落点</td><td>需要预先承诺，窗口错过就浪费</td></tr><tr><td>Cypher</td><td>Intel / Repeat</td><td>守住侧翼注意力</td><td>装置可被发现和破坏</td></tr></tbody></table>
+</section>
+
+<section id="entry"><h2>04 一次进点不是一串技能连招</h2>
+<div class="case"><span class="tag">假设局面</span><span class="tag">进攻方五人尚存</span><span class="tag">准备打一个有人防守的包点</span><h3>一波有效进点，处理的是连续出现的三个问题</h3><p><b>第一步，确认。</b> 队伍先用站位或低成本工具试探，弄清防守方有没有前压、近点谁在守、对方为拖延交了什么。</p><p><b>第二步，缩窄。</b> 先锋解决最难盲清的近点压力，控场者切掉最远、最难对枪的视野。此时队伍只需处理几条被压缩过的枪线。</p><p><b>第三步，兑现。</b> 决斗者在信息和遮蔽同时有效的窗口进场，其他人跟枪、补枪或下包。哨卫和留守队友保证推进时不被侧翼偷掉，并把下包后的站位固定下来。</p></div>
+<p>一套技能是否好用，不只看命中率，还要看它能否被下一名队友接住。侦查已经结束才开烟，闪光已经爆完才起身，决斗者先进去而补枪线还在路上，都会让工具变成孤立的动作。VALORANT 的协作难点恰好在这里：技能使用要有个人操作，也要有共享的时间表。</p></section>
+
+<section id="balance"><h2>05 技能与枪战之间的平衡边界</h2>
+<div class="model"><b>技能系统必须被限制在“创造条件”的位置</b><div class="formula">技能资源投入 → 产生有限窗口 → 玩家用枪法、站位和补枪完成结果</div><p class="note">若把最后一步也交给技能，英雄就会挤压枪械熟练度。若前两步做得不够，技能又只会变成特效。</p></div>
+<table><thead><tr><th>设计边界</th><th>它留下的对抗空间</th><th>对系统的意义</th></tr></thead><tbody>
+<tr><td>次数、经济或冷却</td><td>工具不能无成本重复使用</td><td>玩家要判断把资源交在试探、进点还是残局</td></tr>
+<tr><td>短时效果与明确提示</td><td>对手有躲避、拖延或反打窗口</td><td>优势不能自动延续到整回合</td></tr>
+<tr><td>可破坏、可规避或可反制的工具</td><td>信息和控制不是单向命令</td><td>防守方仍能用位置和反应改变结果</td></tr>
+<tr><td>高效且清晰的枪械击杀</td><td>进入枪线后仍需靠准星和补枪</td><td>保住战术射击的主要胜负手</td></tr>
+</tbody></table>
+<p>官方的平衡说明可以看见这条线。先锋的开角技能被描述为需要协作和有意识时机才能发挥价值；哨卫的作用则是惩罚忽略信息、反复五人抱团冲点的进攻。这些调整始终要保留双方对同一波工具的回应机会，单纯增加效果只会缩窄对抗空间。</p></section>
+
+<div class="evidence"><div><b>Jett：从反应式撤错改成预先承诺</b>Tailwind 增加预激活并缩短可用窗口，保留主动进点，削弱持狙架角后的无条件逃生。</div><div><b>Cypher：从装置处决改成可读的监控网络</b>摄像头增加声音与近距离暴露，绊线降低致死性，信息职能仍在，但对手有机会发现和处理。</div><div><b>Omen：限制低反制的单向烟</b>烟雾落点被约束到可站立地形，减少借装饰物制造难以回应的防守优势。</div><div><b>全局：削弱无协作技能的同等收益</b>11.08 版本明确提出，无协作技能不应和组织良好的战术得到相同效果，能力需要在正确时间和地点使用。</div></div>
+
+<section id="cs"><h2>06 它和 CS 的差异，落在角色绑定与时间表</h2>
+<p>CS 也有烟、闪、火和雷，所以“VALORANT 有技能”并不足以解释区别。更准确的差异有三层。</p>
+<table><thead><tr><th>比较维度</th><th>CS 通用投掷物</th><th>VALORANT 英雄技能</th><th>产生的设计结果</th></tr></thead><tbody><tr><td>工具归属</td><td>多数队员可购买同类基础工具</td><td>工具与英雄身份和职能绑定</td><td>选人阶段提前规定队伍能解决哪些地图问题</td></tr><tr><td>使用方式</td><td>共享抛物逻辑和地图点位学习</td><td>扫描、位移、部署、全图选点等交互并存</td><td>角色熟练度也包含独立的技能操作</td></tr><tr><td>资源节奏</td><td>以回合购买和投掷物数量为主</td><td>购买、冷却、击杀刷新和终极点数并存</td><td>每名英雄在回合里的可用时间表不同</td></tr><tr><td>阵容影响</td><td>战术工具的基础覆盖相对稳定</td><td>阵容会缺少某类信息、烟位或侧翼工具</td><td>同一张地图会因阵容改变默认战术</td></tr></tbody></table>
+<p>MOBA 元素主要体现在角色身份、技能组和队伍职能。战术 FPS 的约束则体现在一命、快速击杀、经济与枪线。VALORANT 的系统难题，是让前者持续制造新战术，同时不让它吞掉后者。</p></section>
+
+<section id="measure"><h2>07 如果由我验证，会测技能有没有被转化</h2>
+<p>Riot 曾公开举过类似问题：“闪光使用后，玩家有多大概率真的去抢角度”“易伤生效后，多大概率带来伤害”。技能命中率不是终点，命中后的行动才是技能价值。</p>
+<table><thead><tr><th>技能目的</th><th>基础使用指标</th><th>转化指标</th><th>越界信号</th></tr></thead><tbody><tr><td>侦察</td><td>覆盖人数、装置存活时间</td><td>信息后 5 秒内转点、逼退或击杀</td><td>被扫后死亡率过高，规避空间不足</td></tr><tr><td>烟雾</td><td>覆盖枪线数量、持续时间</td><td>烟存续期间的进点与下包率</td><td>单向收益过高，对手无法判断来源</td></tr><tr><td>闪光与控制</td><td>命中人数、友军误伤率</td><td>效果内抢角和补枪成功率</td><td>无协作使用仍稳定换到击杀</td></tr><tr><td>位移</td><td>使用位置、前后存活率</td><td>首次进点后队友落位率</td><td>防守撤错收益高于主动破点收益</td></tr><tr><td>哨卫装置</td><td>触发、破坏、绕行比例</td><td>为队友节省的侧翼观察时间</td><td>触发装置几乎等同于死亡</td></tr></tbody></table>
+<p>这些指标需要真实遥测。本文只提出计算口径，不写成已经得到的结论。</p></section>
+
+<section id="conclusion"><h2>08 结论</h2><div class="closing"><b>英雄技能把一个模糊的大问题切成几道可以执行的小问题。</b><br>先把“敌人到底在哪”处理成几个待清的角；再把“这里能不能走”处理成一条短暂可通过的路线；最后把“什么时候动”对齐成队友共同的窗口。技能负责把局面变得可操作，枪法决定玩家能否把这个局面赢下来。</div></section>
+
+<section><h2>资料与分析边界</h2><p>英雄四职能、Tac Cycle、英雄技能及平衡方向来自官方资料。全文的进点案例、比较模型和指标设计为个人分析，不代表具体版本强度或职业赛事结论。版本信息核对截止 2026 年 9 月 3 日。</p><ul><li><a href="https://playvalorant.com/en-us/news/dev/how-we-balance-valorant/">Riot 官方：Tac Cycle 与平衡方法</a></li><li><a href="https://playvalorant.com/en-us/console/">VALORANT 官方：四类英雄职能</a></li><li><a href="https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-11-08/">VALORANT 11.08：技能与枪战、协作与反制</a></li><li><a href="https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-4-08/">VALORANT 4.08：Jett Tailwind 预激活窗口</a></li><li><a href="https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-7-04/">VALORANT 7.04：Jett 主动破点与反应式撤错</a></li><li><a href="https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-9-10/">VALORANT 9.10：Omen 单向烟反制</a></li><li><a href="https://playvalorant.com/en-us/agents/cypher/">VALORANT 官方英雄页：Cypher</a></li><li><a href="https://playvalorant.com/en-us/news/dev/state-of-the-agents-september-2021/">Riot 官方：技能命中后的转化指标</a></li><li><a href="https://playvalorant.com/en-us/news/game-updates/ask-valorant-5/">Riot 官方：伤害技能与高后果枪战边界</a></li></ul></section>
+</main></body></html>

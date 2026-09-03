@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "player_name": "射手学员",
+  "settings": { "sensitivity": 1.0, "fov": 95 },
+  "levels": {
+    "1-1": { "best_score": 92, "best_time": 174.3, "best_accuracy": 0.82, "best_hits_taken": 1 }
+  },
+  "title_unlocked": {
+    "vertex_shooter": false,
+    "sharpshooter": false,
+    "speedster": false,
+    "flawless": false,
+    "one_mag_focus": false
+  }
+}

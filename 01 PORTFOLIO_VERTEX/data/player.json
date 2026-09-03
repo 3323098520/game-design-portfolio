@@ -1,0 +1,8 @@
+{
+  "max_hp": 100,
+  "walk_speed_mps": 5,
+  "sprint": { "speed_mps": 8, "duration_sec": 3, "cooldown_sec": 5 },
+  "air_control_multiplier": 0.8,
+  "fov": { "default": 95, "min": 70, "max": 110 },
+  "sensitivity": { "default": 1.0, "min": 0.2, "max": 2.0 }
+}

@@ -1,0 +1,77 @@
+{
+  "pistol": {
+    "name": "手枪",
+    "role": "初始通用,中距离精准;持枪移速加成,弹药最充裕,计分友好",
+    "damage": 25,
+    "headshot_multiplier": 1.5,
+    "fire_rate_per_sec": 4,
+    "magazine_size": 12,
+    "reserve_ammo": 96,
+    "reload_time_sec": 1.2,
+    "fire_mode": "semi_auto",
+    "recoil": {
+      "vertical_deg_per_shot": 0.2,
+      "controlled_shots": 0,
+      "spread_deg": 0.5,
+      "spread_max_deg": 1.0,
+      "recovery_sec": 0.1
+    },
+    "ads": {
+      "spread_multiplier": 0.5,
+      "move_speed_multiplier": 0.6
+    },
+    "move_speed_multiplier": 1.1
+  },
+  "assault_rifle": {
+    "name": "突击步枪",
+    "role": "主力,中远距离;点射精准,连射扩散渐增;携带弹药有限,依赖弹药箱",
+    "damage": 22,
+    "headshot_multiplier": 1.5,
+    "fire_rate_per_sec": 10,
+    "magazine_size": 30,
+    "reserve_ammo": 90,
+    "reload_time_sec": 1.8,
+    "fire_mode": "full_auto",
+    "recoil": {
+      "vertical_deg_per_shot": 0.8,
+      "controlled_shots": 5,
+      "spread_deg": 2.0,
+      "spread_max_deg": 2.0,
+      "recovery_sec": 0.15
+    },
+    "ads": {
+      "spread_multiplier": 0.5,
+      "move_speed_multiplier": 0.6
+    },
+    "move_speed_multiplier": 1.0
+  },
+  "shotgun": {
+    "name": "霰弹枪",
+    "role": "近战爆发;距离衰减明显,克制冲锋型敌人",
+    "damage": 8,
+    "pellet_count": 10,
+    "headshot_multiplier": 1.5,
+    "fire_rate_per_sec": 1,
+    "magazine_size": 6,
+    "reserve_ammo": 30,
+    "reload_time_sec": 2.5,
+    "fire_mode": "pump",
+    "recoil": {
+      "vertical_deg_per_shot": 1.2,
+      "controlled_shots": 0,
+      "spread_deg": 3.0,
+      "spread_max_deg": 3.0,
+      "recovery_sec": 0.3
+    },
+    "ads": {
+      "spread_multiplier": 0.8,
+      "move_speed_multiplier": 0.8
+    },
+    "move_speed_multiplier": 1.0,
+    "falloff": {
+      "full_damage_until_m": 8,
+      "min_damage_at_m": 20,
+      "min_multiplier": 0.2
+    }
+  }
+}

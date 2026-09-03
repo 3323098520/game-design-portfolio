@@ -1,0 +1,46 @@
+{
+  "patrol": {
+    "name": "巡逻机器人",
+    "hp": 60,
+    "move_speed_mps": 2,
+    "perception": { "range_m": 15, "fov_deg": 60, "reaction_sec": 0.5 },
+    "attack": { "type": "ranged", "damage": 8, "interval_sec": 0.8, "range_m": 15 },
+    "hitstun_sec": 0.15,
+    "behavior": "定点巡逻,发现玩家后站立射击"
+  },
+  "rusher": {
+    "name": "突击机器人",
+    "hp": 80,
+    "move_speed_mps": 4,
+    "perception": { "range_m": 12, "fov_deg": 90, "reaction_sec": 0.3 },
+    "attack": { "type": "melee_charge", "damage": 12, "interval_sec": 1.0, "range_m": 2 },
+    "hitstun_sec": 0.2,
+    "behavior": "发现后直线冲锋,近身碰撞伤害"
+  },
+  "drone": {
+    "name": "无人机",
+    "hp": 40,
+    "move_speed_mps": 3,
+    "airborne": true,
+    "perception": { "range_m": 18, "fov_deg": 360, "reaction_sec": 0.4 },
+    "attack": { "type": "ranged", "damage": 6, "interval_sec": 1.2, "range_m": 18 },
+    "hitstun_sec": 0.15,
+    "behavior": "空中横向飘移射击"
+  },
+  "elite": {
+    "name": "精英机器人",
+    "hp": 300,
+    "move_speed_mps": 2.5,
+    "perception": { "range_m": 20, "fov_deg": 90, "reaction_sec": 0.6 },
+    "attack": {
+      "type": "ranged_burst",
+      "damage": 10,
+      "burst_shots": 3,
+      "interval_sec": 3.0,
+      "range_m": 20,
+      "interruptible": true
+    },
+    "hitstun_sec": 0.3,
+    "behavior": "阶段性三连扫射,受击可打断"
+  }
+}
