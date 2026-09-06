@@ -1,0 +1,9 @@
+import {Game} from '../game.mjs?v=20260906-1';
+import {View} from '../view.mjs?v=20260906-1';
+const data=Object.fromEntries(await Promise.all(['player','weapons','enemies','levels'].map(async name=>[name,await fetch(new URL(`../../../01%20PORTFOLIO_VERTEX/data/${name}.json`,import.meta.url)).then(r=>r.json())])));
+const game=new Game(data);game.start(3);game.state='paused';const view=new View(document.getElementById('view'));view.build(game);
+function pose(name){const p=game.p;p.kick=0;p.pump=0;p.reload=null;p.ads=false;for(const gun of view.guns){gun.userData.flashLife=0;gun.userData.flash.visible=false;}if(name==='shot'){p.kick=1;view.guns[p.weapon].userData.flashLife=1;}if(name==='pump')p.pump=.55;if(name==='reload'){p.reload={start:0,end:game.weapon().reload_time_sec};game.time=p.reload.end*.45;}if(name==='ads'){p.ads=true;view.weaponRoot.position.set(0,p.weapon===0?-.13:-.15,-.46);}else view.weaponRoot.position.set(.21,-.16,-.5);view.render(game,0,{fov:95});document.getElementById('result').textContent=`${game.weapon().name} / ${name} · 三角面 ${view.renderer.info.render.triangles}`;}
+document.querySelectorAll('[data-gun]').forEach(button=>button.onclick=()=>{game.p.weapon=Number(button.dataset.gun);pose('idle');});
+document.querySelectorAll('[data-pose]').forEach(button=>button.onclick=()=>pose(button.dataset.pose));
+document.getElementById('stress').onclick=()=>{pose('idle');const before={...view.renderer.info.memory};for(let i=0;i<20;i++)view.build(game);const after={...view.renderer.info.memory};document.getElementById('result').textContent=`重建检查 ${JSON.stringify(before)===JSON.stringify(after)?'PASS':'CHECK'} / 前 ${JSON.stringify(before)} / 后 ${JSON.stringify(after)}`;};
+window.addEventListener('resize',()=>{view.resize();view.render(game,0,{fov:95});});pose('idle');

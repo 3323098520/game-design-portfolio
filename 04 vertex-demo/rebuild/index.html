@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="VERTEX 顶点训练中心：按原始策划案重构的五关低多边形 FPS Demo"><title>VERTEX / 顶点训练中心</title><link rel="stylesheet" href="style.css?v=20260906-1"></head>
+<body>
+<canvas id="viewport" aria-label="第一人称训练场"></canvas>
+<div id="loading"><span class="eyebrow">VERTEX TRAINING CENTER</span><h1>正在准备训练场</h1><p id="load-message">装载原始关卡与数值…</p></div>
+<section id="menu" class="screen hidden">
+ <div class="brand"><span class="brand-mark">V</span><span>VERTEX<small>顶点训练中心 / 2050</small></span></div>
+ <div class="menu-card"><span class="eyebrow">SHOOT. LEARN. RETRY.</span><h1>每次重来，<br>离顶点近一点。</h1><p class="intro">五场短关卡认证。用更准的枪法、更少的受击，刷新自己的最好成绩。</p>
+ <div class="menu-actions"><button id="continue" class="primary">开始训练 <span>→</span></button><button id="open-settings">操作与设置</button></div>
+ <div id="levels" class="level-list"></div><p class="fine">PC 键鼠体验 · 成绩仅保存在此浏览器 · 重构测试版 20260906.1</p>
+ </div><aside class="menu-note"><b>三种武器。三种节奏。</b><p>手枪点射 / 步枪压枪 / 霰弹近战</p><span>时间 50%　命中 30%　生存 20%</span></aside>
+</section>
+<section id="hud" class="hidden">
+ <div class="hud-objective"><span id="level-name"></span><strong id="objective"></strong><small id="stage"></small></div>
+ <div class="hud-time"><span>训练计时</span><strong id="timer">00:00</strong><small id="par"></small></div>
+ <div id="reticle"><i></i><i></i><i></i><i></i><b></b></div><div id="hitmark">×</div><div id="damage-numbers"></div>
+ <div class="hud-ammo"><span id="weapon-name"></span><strong><b id="mag">12</b><em id="reserve">/ 96</em></strong><small id="weapon-hint"></small><div id="reload-bar"><i></i></div></div>
+ <div class="hud-health"><div><span>生命</span><b id="health">100</b><span id="sprint-label">冲刺就绪</span></div><div class="health-track"><i id="health-fill"></i></div><div class="sprint-track"><i id="sprint-fill"></i></div></div>
+</section>
+<div id="damage-vignette"></div><div id="subtitle" class="hidden"></div><div id="toast" class="hidden"></div>
+<section id="pause" class="modal hidden"><div class="panel"><span class="eyebrow">TRAINING PAUSED</span><h2>喘口气，调整一下。</h2><p id="pause-message">训练已暂停，计时和敌人行动都已停止。</p><button id="resume" class="primary">继续训练 →</button><button id="window-mode">窗口兼容模式 · 拖动观察</button><button id="pause-settings">操作与设置</button><button id="retry-pause">重新开始本关</button><button id="return-menu">返回选关</button></div></section>
+<section id="settings" class="modal hidden"><div class="panel settings-panel"><span class="eyebrow">MAKE IT YOURS</span><h2>操作与设置</h2>
+ <label>鼠标灵敏度 <output id="sensitivity-value"></output><input id="sensitivity" type="range" min="0.2" max="2" step="0.001"></label>
+ <label>水平视野 FOV <output id="fov-value"></output><input id="fov" type="range" min="70" max="110" step="1"></label>
+ <label>总音量 <output id="master-value"></output><input id="master" type="range" min="0" max="1" step="0.01"></label>
+ <label>音效 <output id="effects-value"></output><input id="effects" type="range" min="0" max="1" step="0.01"></label>
+ <label>背景音乐 <output id="music-value"></output><input id="music" type="range" min="0" max="1" step="0.01"></label>
+ <div class="check-row"><label><input id="highContrast" type="checkbox">高对比命中反馈</label><label><input id="subtitles" type="checkbox">教学字幕</label></div>
+ <label class="select-label">准星<select id="crosshair"><option value="cross">十字</option><option value="dot">圆点</option></select></label>
+ <div class="controls"><span>WASD 移动</span><span>左键 射击</span><span>右键 瞄准</span><span>R 换弹</span><span>1 / 2 / 3 切枪</span><span>Shift 冲刺</span><span>空格 跳跃</span><span>Esc 暂停</span></div><p class="fine">手枪、霰弹枪每按一次射击一次；步枪可按住连射。切枪或射击可取消换弹，未完成的换弹不增加弹药。</p><button id="close-settings" class="primary">保存并返回</button><button id="reset-settings">恢复默认设置</button></div></section>
+<section id="result" class="modal hidden"><div class="panel result-panel"><span class="eyebrow" id="result-label"></span><h2 id="result-title"></h2><div class="result-main"><strong id="grade"></strong><div><b id="score"></b><small id="record"></small></div></div><div id="score-parts"></div><p id="result-details"></p><div class="result-actions"><button id="retry-result" class="primary">再挑战一次 ↻</button><button id="next-level">下一关 →</button><button id="result-menu">返回选关</button></div></div></section>
+<script>window.addEventListener('error',()=>{const loading=document.getElementById('loading');if(!loading.classList.contains('hidden'))document.getElementById('load-message').textContent='页面资源未加载完整。请按 Ctrl + F5 刷新，并确认通过网站链接打开。';});</script>
+<script type="module" src="app.mjs?v=20260906-1"></script></body></html>
