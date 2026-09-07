@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1560" role="img" aria-label="无畏契约系统功能关系图">
+<rect width="100%" height="100%" fill="white"/>
+<g font-family="Microsoft YaHei,PingFang SC,sans-serif" fill="#222">
+<rect x="15" y="708" width="210" height="74" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="33" y="759" font-size="32" font-weight="700">无畏契约</text>
+<polyline points="225,745 253,745 253,115 285,115" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="85" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="126" font-size="29" font-weight="700">回合目标</text>
+<polyline points="525,115 563,115 563,59 590,59" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="67" font-size="27" font-weight="400">购买准备 决定本回合投入</text>
+<polyline points="600,79 1450,79" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,115 563,115 563,108 590,108" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="116" font-size="27" font-weight="400">进攻安装 争取爆能器引爆</text>
+<polyline points="600,128 1450,128" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,115 563,115 563,157 590,157" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="165" font-size="27" font-weight="400">防守阻止安装 或完成拆除</text>
+<polyline points="600,177 1450,177" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,115 563,115 563,206 590,206" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="214" font-size="27" font-weight="400">半场交换阵营 重新处理攻守</text>
+<polyline points="600,226 1450,226" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,326 285,326" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="296" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="337" font-size="29" font-weight="700">地图</text>
+<polyline points="525,326 563,326 563,270 590,270" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="278" font-size="27" font-weight="400">辨认入口与通路 选择推进方向</text>
+<polyline points="600,290 1450,290" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,326 563,326 563,319 590,319" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="327" font-size="27" font-weight="400">观察掩体和高低差 预判枪线</text>
+<polyline points="600,339 1450,339" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,326 563,326 563,368 590,368" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="376" font-size="27" font-weight="400">争夺区域 为安装或回防让路</text>
+<polyline points="600,388 1450,388" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,326 563,326 563,417 590,417" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="425" font-size="27" font-weight="400">调整位置 应对目标与时间变化</text>
+<polyline points="600,437 1450,437" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,537 285,537" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="507" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="548" font-size="29" font-weight="700">武器与经济</text>
+<polyline points="525,537 563,537 563,481 590,481" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="489" font-size="27" font-weight="400">购买枪械护甲 适应当前预算</text>
+<polyline points="600,501 1450,501" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,537 563,537 563,530 590,530" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="538" font-size="27" font-weight="400">购买所需技能 支持本回合安排</text>
+<polyline points="600,550 1450,550" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,537 563,537 563,579 590,579" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="587" font-size="27" font-weight="400">比较武器特点 选择交战距离</text>
+<polyline points="600,599 1450,599" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,537 563,537 563,628 590,628" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="636" font-size="27" font-weight="400">沟通购买意图 协调队伍投入</text>
+<polyline points="600,648 1450,648" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,748 285,748" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="718" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="759" font-size="29" font-weight="700">英雄技能</text>
+<polyline points="525,748 563,748 563,692 590,692" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="700" font-size="27" font-weight="400">选定英雄 确定个人技能组合</text>
+<polyline points="600,712 1450,712" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,748 563,748 563,741 590,741" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="749" font-size="27" font-weight="400">侦察与陷阱 获取有限范围信息</text>
+<polyline points="600,761 1450,761" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,748 563,748 563,790 590,790" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="798" font-size="27" font-weight="400">烟幕遮挡 影响双方视线</text>
+<polyline points="600,810 1450,810" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,748 563,748 563,839 590,839" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="847" font-size="27" font-weight="400">位移与干扰 配合队员行动</text>
+<polyline points="600,859 1450,859" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,959 285,959" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="929" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="970" font-size="29" font-weight="700">信息沟通</text>
+<polyline points="525,959 563,959 563,903 590,903" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="911" font-size="27" font-weight="400">语音报点 传递位置与动向</text>
+<polyline points="600,923 1450,923" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,959 563,959 563,952 590,952" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="960" font-size="27" font-weight="400">地图标记 指示目标和危险</text>
+<polyline points="600,972 1450,972" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,959 563,959 563,1001 590,1001" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1009" font-size="27" font-weight="400">报告技能准备 协调出手时机</text>
+<polyline points="600,1021 1450,1021" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,959 563,959 563,1050 590,1050" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1058" font-size="27" font-weight="400">区分观察与推测 更新旧信息</text>
+<polyline points="600,1070 1450,1070" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,1170 285,1170" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="1140" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="1181" font-size="29" font-weight="700">练习与对战</text>
+<polyline points="525,1170 563,1170 563,1114 590,1114" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1122" font-size="27" font-weight="400">练习基础操作 理解射击状态</text>
+<polyline points="600,1134 1450,1134" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1170 563,1170 563,1163 590,1163" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1171" font-size="27" font-weight="400">熟悉单个英雄 练习技能使用</text>
+<polyline points="600,1183 1450,1183" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1170 563,1170 563,1212 590,1212" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1220" font-size="27" font-weight="400">不同对战模式 提供体验入口</text>
+<polyline points="600,1232 1450,1232" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1170 563,1170 563,1261 590,1261" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1269" font-size="27" font-weight="400">回看失误 分清操作和决策问题</text>
+<polyline points="600,1281 1450,1281" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,1381 285,1381" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="1351" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="1392" font-size="29" font-weight="700">局外内容</text>
+<polyline points="525,1381 563,1381 563,1325 590,1325" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1333" font-size="27" font-weight="400">解锁英雄 扩大角色选择范围</text>
+<polyline points="600,1345 1450,1345" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1381 563,1381 563,1374 590,1374" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1382" font-size="27" font-weight="400">选择武器外观 进行个性展示</text>
+<polyline points="600,1394 1450,1394" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1381 563,1381 563,1423 590,1423" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1431" font-size="27" font-weight="400">组队 与其他玩家共同对战</text>
+<polyline points="600,1443 1450,1443" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1381 563,1381 563,1472 590,1472" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1480" font-size="27" font-weight="400">查看对局记录 了解比赛结果</text>
+<polyline points="600,1492 1450,1492" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+</g></svg>

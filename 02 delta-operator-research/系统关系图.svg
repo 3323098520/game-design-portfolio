@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1560" role="img" aria-label="烽火地带系统功能关系图">
+<rect width="100%" height="100%" fill="white"/>
+<g font-family="Microsoft YaHei,PingFang SC,sans-serif" fill="#222">
+<rect x="15" y="708" width="210" height="74" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="33" y="759" font-size="32" font-weight="700">烽火地带</text>
+<polyline points="225,745 253,745 253,115 285,115" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="85" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="126" font-size="29" font-weight="700">配装</text>
+<polyline points="525,115 563,115 563,59 590,59" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="67" font-size="27" font-weight="400">选择枪械与配件 调整操控</text>
+<polyline points="600,79 1450,79" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,115 563,115 563,108 590,108" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="116" font-size="27" font-weight="400">选择弹药 应对防护差异</text>
+<polyline points="600,128 1450,128" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,115 563,115 563,157 590,157" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="165" font-size="27" font-weight="400">准备护甲与医疗 维持交战状态</text>
+<polyline points="600,177 1450,177" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,115 563,115 563,206 590,206" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="214" font-size="27" font-weight="400">配置背包 决定可携带空间</text>
+<polyline points="600,226 1450,226" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,326 285,326" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="296" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="337" font-size="29" font-weight="700">搜集</text>
+<polyline points="525,326 563,326 563,270 590,270" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="278" font-size="27" font-weight="400">搜索容器 拾取地图物资</text>
+<polyline points="600,290 1450,290" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,326 563,326 563,319 590,319" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="327" font-size="27" font-weight="400">查看战利品 比较物品用途</text>
+<polyline points="600,339 1450,339" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,326 563,326 563,368 590,368" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="376" font-size="27" font-weight="400">整理背包 替换已有物品</text>
+<polyline points="600,388 1450,388" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,326 563,326 563,417 590,417" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="425" font-size="27" font-weight="400">保留任务和制造需要的材料</text>
+<polyline points="600,437 1450,437" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,537 285,537" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="507" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="548" font-size="29" font-weight="700">战斗与干员</text>
+<polyline points="525,537 563,537 563,481 590,481" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="489" font-size="27" font-weight="400">枪械交战 消耗弹药和防护</text>
+<polyline points="600,501 1450,501" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,537 563,537 563,530 590,530" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="538" font-size="27" font-weight="400">侦察与标记 补充小队信息</text>
+<polyline points="600,550 1450,550" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,537 563,537 563,579 590,579" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="587" font-size="27" font-weight="400">烟幕和机动 辅助接近或脱离</text>
+<polyline points="600,599 1450,599" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,537 563,537 563,628 590,628" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="636" font-size="27" font-weight="400">治疗与救援 恢复小队行动能力</text>
+<polyline points="600,648 1450,648" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,748 285,748" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="718" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="759" font-size="29" font-weight="700">地图与撤离</text>
+<polyline points="525,748 563,748 563,692 590,692" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="700" font-size="27" font-weight="400">查看资源区域 安排搜索路线</text>
+<polyline points="600,712 1450,712" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,748 563,748 563,741 590,741" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="749" font-size="27" font-weight="400">辨认枪声与位置 调整接战方向</text>
+<polyline points="600,761 1450,761" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,748 563,748 563,790 590,790" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="798" font-size="27" font-weight="400">查看撤离点 核对可用条件</text>
+<polyline points="600,810 1450,810" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,748 563,748 563,839 590,839" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="847" font-size="27" font-weight="400">到达并撤离 带出可结算物资</text>
+<polyline points="600,859 1450,859" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,959 285,959" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="929" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="970" font-size="29" font-weight="700">仓库与交易</text>
+<polyline points="525,959 563,959 563,903 590,903" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="911" font-size="27" font-weight="400">保存带出物资 留作后续使用</text>
+<polyline points="600,923 1450,923" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,959 563,959 563,952 590,952" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="960" font-size="27" font-weight="400">出售物品 获得购置资金</text>
+<polyline points="600,972 1450,972" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,959 563,959 563,1001 590,1001" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1009" font-size="27" font-weight="400">购买或兑换 补充下一局装备</text>
+<polyline points="600,1021 1450,1021" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,959 563,959 563,1050 590,1050" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1058" font-size="27" font-weight="400">整理仓库 为后续收获留空间</text>
+<polyline points="600,1070 1450,1070" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,1170 285,1170" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="1140" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="1181" font-size="29" font-weight="700">任务</text>
+<polyline points="525,1170 563,1170 563,1114 590,1114" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1122" font-size="27" font-weight="400">查看要求 确定本局目标</text>
+<polyline points="600,1134 1450,1134" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1170 563,1170 563,1163 590,1163" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1171" font-size="27" font-weight="400">完成目标 获取奖励与进度</text>
+<polyline points="600,1183 1450,1183" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1170 563,1170 563,1212 590,1212" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1220" font-size="27" font-weight="400">部门成长 关联后续解锁</text>
+<polyline points="600,1232 1450,1232" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1170 563,1170 563,1261 590,1261" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1269" font-size="27" font-weight="400">材料需求 影响搜集优先级</text>
+<polyline points="600,1281 1450,1281" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="225,745 253,745 253,1381 285,1381" fill="none" stroke="#92adcc" stroke-width="2"/>
+<rect x="285" y="1351" width="240" height="60" rx="5" fill="#edf2f7" stroke="#92adcc"/>
+<text x="304" y="1392" font-size="29" font-weight="700">特勤处</text>
+<polyline points="525,1381 563,1381 563,1325 590,1325" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1333" font-size="27" font-weight="400">查看设施和升级要求</text>
+<polyline points="600,1345 1450,1345" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1381 563,1381 563,1374 590,1374" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1382" font-size="27" font-weight="400">投入材料 推进设施升级</text>
+<polyline points="600,1394 1450,1394" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1381 563,1381 563,1423 590,1423" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1431" font-size="27" font-weight="400">制造物品 补充装备与物资</text>
+<polyline points="600,1443 1450,1443" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+<polyline points="525,1381 563,1381 563,1472 590,1472" fill="none" stroke="#92adcc" stroke-width="2"/>
+<text x="603" y="1480" font-size="27" font-weight="400">长期需求 引导再次进入地图</text>
+<polyline points="600,1492 1450,1492" fill="none" stroke="#b8c9dc" stroke-width="1"/>
+</g></svg>
