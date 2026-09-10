@@ -1,138 +1,198 @@
-"""Build plain reading editions and functional maps from the two Markdown sources.
-
-DOCX PDFs are produced with the documents skill renderer after this command.
-"""
+"""Generate editorial HTML, DOCX and custom figures for both analyses."""
 from pathlib import Path
-import html
-import re
-import json
+from urllib.parse import quote
+import argparse, html, re
+
 from PIL import Image, ImageDraw, ImageFont
 from docx import Document
-from docx.shared import Mm, Pt, RGBColor
+from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
+from docx.shared import Mm, Pt, RGBColor
 
-ROOT = Path(__file__).resolve().parents[1]
-SPECS = [
-    ('02 delta-operator-research', '三角洲行动烽火地带干员系统研究', '三角洲行动玩法分析', '烽火地带', [
-        ('配装', ['选择枪械与配件 调整操控', '选择弹药 应对防护差异', '准备护甲与医疗 维持交战状态', '配置背包 决定可携带空间']),
-        ('搜集', ['搜索容器 拾取地图物资', '查看战利品 比较物品用途', '整理背包 替换已有物品', '保留任务和制造需要的材料']),
-        ('战斗与干员', ['枪械交战 消耗弹药和防护', '侦察与标记 补充小队信息', '烟幕和机动 辅助接近或脱离', '治疗与救援 恢复小队行动能力']),
-        ('地图与撤离', ['查看资源区域 安排搜索路线', '辨认枪声与位置 调整接战方向', '查看撤离点 核对可用条件', '到达并撤离 带出可结算物资']),
-        ('仓库与交易', ['保存带出物资 留作后续使用', '出售物品 获得购置资金', '购买或兑换 补充下一局装备', '整理仓库 为后续收获留空间']),
-        ('任务', ['查看要求 确定本局目标', '完成目标 获取奖励与进度', '部门成长 关联后续解锁', '材料需求 影响搜集优先级']),
-        ('特勤处', ['查看设施和升级要求', '投入材料 推进设施升级', '制造物品 补充装备与物资', '长期需求 引导再次进入地图']),
-    ]),
-    ('03 valorant-agent-research', 'VALORANT英雄技能系统研究', 'VALORANT玩法分析', '无畏契约', [
-        ('回合目标', ['购买准备 决定本回合投入', '进攻安装 争取爆能器引爆', '防守阻止安装 或完成拆除', '半场交换阵营 重新处理攻守']),
-        ('地图', ['辨认入口与通路 选择推进方向', '观察掩体和高低差 预判枪线', '争夺区域 为安装或回防让路', '调整位置 应对目标与时间变化']),
-        ('武器与经济', ['购买枪械护甲 适应当前预算', '购买所需技能 支持本回合安排', '比较武器特点 选择交战距离', '沟通购买意图 协调队伍投入']),
-        ('英雄技能', ['选定英雄 确定个人技能组合', '侦察与陷阱 获取有限范围信息', '烟幕遮挡 影响双方视线', '位移与干扰 配合队员行动']),
-        ('信息沟通', ['语音报点 传递位置与动向', '地图标记 指示目标和危险', '报告技能准备 协调出手时机', '区分观察与推测 更新旧信息']),
-        ('练习与对战', ['练习基础操作 理解射击状态', '熟悉单个英雄 练习技能使用', '不同对战模式 提供体验入口', '回看失误 分清操作和决策问题']),
-        ('局外内容', ['解锁英雄 扩大角色选择范围', '选择武器外观 进行个性展示', '组队 与其他玩家共同对战', '查看对局记录 了解比赛结果']),
-    ]),
-]
+from rebuild_analysis_sources import rebuild
 
-def system_map(folder, root_name, groups):
-    width, height = 1500, 1560
-    im = Image.new('RGB', (width * 2, height * 2), 'white')
-    draw = ImageDraw.Draw(im)
-    svg = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" aria-label="{root_name}系统功能关系图">',
-           '<rect width="100%" height="100%" fill="white"/>', '<g font-family="Microsoft YaHei,PingFang SC,sans-serif" fill="#222">']
-    def line(points, color='#92adcc', stroke=2):
-        draw.line([(int(x*2),int(y*2)) for x,y in points], fill=color, width=stroke*2)
-        svg.append(f'<polyline points="'+ ' '.join(f'{x},{y}' for x,y in points)+f'" fill="none" stroke="{color}" stroke-width="{stroke}"/>')
-    def text(x,y,s,size=27,bold=False):
-        font = ImageFont.truetype('C:/Windows/Fonts/'+('msyhbd.ttc' if bold else 'msyh.ttc'), size*2)
-        draw.text((x*2,y*2),s,font=font,fill='#222',anchor='lt')
-        svg.append(f'<text x="{x}" y="{y+size}" font-size="{size}" font-weight="{700 if bold else 400}">{html.escape(s)}</text>')
-    def box(x,y,w,h):
-        draw.rounded_rectangle((x*2,y*2,(x+w)*2,(y+h)*2),radius=10,fill='#edf2f7',outline='#92adcc',width=3)
-        svg.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="5" fill="#edf2f7" stroke="#92adcc"/>')
-    box(15,708,210,74); text(33,727,root_name,32,True)
-    for index,(name,leaves) in enumerate(groups):
-        y = 40 + index*211
-        center = y+75
-        line([(225,745),(253,745),(253,center),(285,center)])
-        box(285,center-30,240,60); text(304,center-18,name,29,True)
-        for k,leaf in enumerate(leaves):
-            ly=y+k*49
-            line([(525,center),(563,center),(563,ly+19),(590,ly+19)])
-            text(603,ly,leaf)
-            line([(600,ly+39),(1450,ly+39)],'#b8c9dc',1)
-    svg += ['</g></svg>']
-    (folder/'系统关系图.svg').write_text('\n'.join(svg),encoding='utf-8')
-    im.save(folder/'系统关系图.png',optimize=True)
-    (folder/'系统关系图.md').write_text('# '+root_name+'\n\n'+'\n'.join('## '+name+'\n\n'+'\n'.join('- '+leaf for leaf in leaves)+'\n' for name,leaves in groups),encoding='utf-8')
+ROOT=Path(__file__).resolve().parents[1]
+FONT=Path("C:/Windows/Fonts/msyh.ttc"); FONT_B=Path("C:/Windows/Fonts/msyhbd.ttc")
+SPECS={
+ "delta":dict(folder="02 delta-operator-research",title="三角洲行动烽火地带玩法系统分析",subtitle="从一套配装到一次撤离 干员小队如何进入搜打撤决策",accent="#3f6f62",soft="#e8f0ed",html="三角洲行动烽火地带干员系统研究.html",pdf="三角洲行动烽火地带干员系统研究.pdf",docx="三角洲行动玩法分析.docx"),
+ "valorant":dict(folder="03 valorant-agent-research",title="VALORANT战术系统分析",subtitle="从停步开枪到五人进点 英雄技能怎样改变信息 空间与节奏",accent="#9b3747",soft="#f4e9eb",html="VALORANT英雄技能系统研究.html",pdf="VALORANT英雄技能系统研究.pdf",docx="VALORANT玩法分析.docx")}
 
-def inline(s):
-    return re.sub(r'(https?://[^\s]+)',lambda m:'<a href="'+html.escape(m[0],quote=True)+'">'+html.escape(m[0])+'</a>',html.escape(s))
 
-def build(spec):
-    dirname, oldstem, title, name, groups = spec
-    folder=ROOT/dirname
-    system_map(folder,name,groups)
-    source=(folder/'正文.md').read_text(encoding='utf-8')
-    assert source.count('\n## ')==3
-    assert not any(c in source for c in ['—','–','\ufffd'])
-    blocks=[b.strip() for b in source.split('\n\n') if b.strip()]
-    doc=Document()
-    sec=doc.sections[0]
-    sec.page_width=Mm(210); sec.page_height=Mm(297)
-    sec.top_margin=sec.bottom_margin=Mm(22)
-    sec.left_margin=sec.right_margin=Mm(24)
-    for sty in ['Normal','Title','Heading 1','Heading 2','Caption']:
-        style=doc.styles[sty]
-        style.font.name='Times New Roman'
-        style.font.color.rgb=RGBColor(0,0,0)
-        style.element.get_or_add_rPr().get_or_add_rFonts().set(qn('w:eastAsia'),'宋体' if sty=='Normal' else '黑体')
-    # The runtime's default Word template contains a blue Title border.
-    for border in doc.styles.element.findall('.//'+qn('w:pBdr')):
-        border.getparent().remove(border)
-    normal=doc.styles['Normal']; normal.font.size=Pt(11)
-    normal.paragraph_format.line_spacing=1.5
-    normal.paragraph_format.space_after=Pt(7)
-    normal.paragraph_format.first_line_indent=Pt(22)
-    normal.paragraph_format.widow_control=True
-    for sty,size in [('Title',20),('Heading 1',15),('Heading 2',12)]:
-        pf=doc.styles[sty].paragraph_format
-        doc.styles[sty].font.size=Pt(size)
-        pf.space_before=Pt(14 if sty!='Title' else 0); pf.space_after=Pt(8)
-        pf.first_line_indent=Pt(0); pf.keep_with_next=True
-    foot=sec.footer.paragraphs[0]; foot.alignment=1
-    field=OxmlElement('w:fldSimple'); field.set(qn('w:instr'),'PAGE'); foot._p.append(field)
-    foot.paragraph_format.first_line_indent=Pt(0)
-    core=doc.core_properties; core.title=title; core.subject='系统和功能 接触系统的顺序 核心玩法'; core.author=''; core.last_modified_by=''
-    body=[]; is_ref=False
-    for block in blocks:
-        if block.startswith('### '):
-            label=block[4:]; is_ref=label=='参考资料'
-            doc.add_heading(label,2); body.append('<h3>'+html.escape(label)+'</h3>')
-        elif block.startswith('## '):
-            label=block[3:]; doc.add_heading(label,1); body.append('<h2>'+html.escape(label)+'</h2>')
-        elif block.startswith('# '):
-            doc.add_paragraph(block[2:],'Title'); body.append('<h1>'+html.escape(block[2:])+'</h1>')
-        elif block.startswith('!['):
-            p=doc.add_paragraph(); p.paragraph_format.first_line_indent=Pt(0)
-            shape=p.add_run().add_picture(str(folder/'系统关系图.png'),width=Mm(162))
-            shape._inline.docPr.set('descr',name+'主要系统与功能，另附可放大矢量图及文字版')
-            body.append('<figure><a href="系统关系图.svg" target="_blank"><img src="系统关系图.svg" alt="'+name+'系统和功能关系图"></a><figcaption><a href="系统关系图.svg" target="_blank">放大系统图</a> · <a href="系统关系图.md">图中文字</a></figcaption></figure>')
-        else:
-            p=doc.add_paragraph(block)
-            if is_ref:
-                p.paragraph_format.first_line_indent=Pt(0)
-                p.paragraph_format.line_spacing=1.15
-                for run in p.runs: run.font.size=Pt(9)
-            body.append('<p'+(' class="reference"' if is_ref else '')+'>'+inline(block)+'</p>')
-    doc.save(folder/(title+'.docx'))
-    css='''body{margin:0;background:#fff;color:#202020;font:17px/1.95 "Songti SC","SimSun",serif}main{max-width:820px;margin:48px auto 80px;padding:0 28px}nav{font:14px/1.8 "Microsoft YaHei",sans-serif;margin-bottom:32px}nav a{margin-right:18px}a{color:#365c83;text-underline-offset:3px;overflow-wrap:anywhere}h1,h2,h3{font-family:"Microsoft YaHei",sans-serif;color:#111;font-weight:600;line-height:1.5}h1{font-size:29px;margin:0 0 26px}h2{font-size:23px;margin:38px 0 20px}h3{font-size:19px;margin:28px 0 12px}p{margin:0 0 16px;text-indent:2em}figure{margin:20px 0 24px}img{width:100%;height:auto}figcaption{font-size:13px;text-align:center}.reference{font-size:13px;text-indent:0;line-height:1.75}@media(max-width:600px){main{margin-top:24px;padding:0 20px}h1{font-size:25px}body{font-size:16px}}@media print{nav,figcaption{display:none}main{max-width:none;margin:0}h2,h3{break-after:avoid}p{orphans:2;widows:2}figure{break-inside:avoid}}'''
-    nav=f'<nav><a href="../">作品集首页</a><a href="{oldstem}.pdf">PDF</a><a href="{title}.docx">Word 文档</a><a href="正文.md">正文源文件</a></nav>'
-    output='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+'</style></head><body><main>'+nav+'\n'.join(body)+'</main></body></html>'
-    (folder/(oldstem+'.html')).write_text(output,encoding='utf-8')
-    refs=source.split('### 参考资料\n\n')[1]
-    (folder/'信息来源汇总.md').write_text('# '+title+' 信息来源\n\n核对日期：2026-09-07。正文中的行为解释为设计分析，假设局面不作为实测记录。\n\n'+refs,encoding='utf-8')
-    print(json.dumps({'document':title,'characters':len(source),'paragraphs':len(doc.paragraphs)},ensure_ascii=False))
+class Fig:
+ def __init__(self,path,spec,title):
+  self.path=path; self.a=spec["accent"]; self.s=spec["soft"]; self.w=1600; self.h=900
+  self.im=Image.new("RGB",(self.w,self.h),"#fbfaf7"); self.d=ImageDraw.Draw(self.im)
+  self.svg=[f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {self.w} {self.h}" role="img" aria-label="{html.escape(title)}"><rect width="100%" height="100%" fill="#fbfaf7"/>']
+ def text(self,x,y,s,size=28,color="#202628",bold=False,anchor="la"):
+  self.d.text((x,y),s,font=ImageFont.truetype(str(FONT_B if bold else FONT),size),fill=color,anchor=anchor)
+  self.svg.append(f'<text x="{x}" y="{y}" font-family="Microsoft YaHei,sans-serif" font-size="{size}" font-weight="{700 if bold else 400}" fill="{color}" dominant-baseline="middle" text-anchor="{"middle" if anchor=="mm" else "start"}">{html.escape(s)}</text>')
+ def rect(self,x1,y1,x2,y2,fill="#fff",outline="#cbd2d0",r=15,w=2):
+  self.d.rounded_rectangle((x1,y1,x2,y2),radius=r,fill=fill,outline=outline,width=w)
+  self.svg.append(f'<rect x="{x1}" y="{y1}" width="{x2-x1}" height="{y2-y1}" rx="{r}" fill="{fill}" stroke="{outline}" stroke-width="{w}"/>')
+ def line(self,pts,color=None,w=5,arrow=False,dash=False):
+  color=color or self.a; self.d.line(pts,fill=color,width=w)
+  self.svg.append(f'<polyline points="{" ".join(f"{x},{y}" for x,y in pts)}" fill="none" stroke="{color}" stroke-width="{w}"'+(' stroke-dasharray="12 10"' if dash else '')+'/>' )
+  if arrow:
+   import math
+   x,y=pts[-1]; px,py=pts[-2]; a=math.atan2(y-py,x-px)
+   tri=[(x,y),(x-22*math.cos(a-.5),y-22*math.sin(a-.5)),(x-22*math.cos(a+.5),y-22*math.sin(a+.5))]
+   self.d.polygon(tri,fill=color); self.svg.append('<polygon points="'+' '.join(f'{x},{y}' for x,y in tri)+f'" fill="{color}"/>')
+ def save(self):
+  self.path.parent.mkdir(parents=True,exist_ok=True); self.im.save(self.path,optimize=True)
+  self.path.with_suffix(".svg").write_text("".join(self.svg)+"</svg>",encoding="utf-8")
 
-if __name__=='__main__':
-    for spec in SPECS: build(spec)
+
+def row(f,labels,y,subs):
+ gap=30; margin=60; ww=(f.w-2*margin-gap*(len(labels)-1))//len(labels); centers=[]
+ for i,(lab,sub) in enumerate(zip(labels,subs)):
+  x=margin+i*(ww+gap); f.rect(x,y,x+ww,y+130); f.text(x+ww//2,y+45,lab,29,f.a,True,"mm"); f.text(x+ww//2,y+91,sub,19,"#5d686a",False,"mm"); centers.append((x+ww//2,y+65,ww))
+ return centers
+
+
+def figures(kind,s):
+ out=ROOT/s["folder"]/"assets"
+ if kind=="delta":
+  f=Fig(out/"delta-system.png",s,"烽火地带局内外系统全景"); f.text(70,70,"局外准备决定带什么进去 局内撤离决定什么能够留下",40,"#172124",True)
+  a=row(f,["任务与设施","仓库与交易","配装预算"],160,["材料需求与阶段目标","库存 购买 出售","枪 弹 甲 药 容量"]); b=row(f,["搜索与任务","交战与干员","路线与撤离"],445,["提高收益 改写目标","改变信息 位置 状态","兑现收益或承担损失"])
+  for x,y,w in a:f.line([(x,y+65),(x,400)],w=4,arrow=True)
+  for x,y,w in b:f.line([(x,y+65),(x,755)],w=4,arrow=True)
+  f.line([(140,755),(1460,755)],"#82908d",3); f.text(800,815,"结算回到仓库 再形成下一局需求",27,"#394648",True,"mm"); f.save()
+  f=Fig(out/"delta-loop.png",s,"从配装到结算的风险收益循环"); f.text(70,70,"每一步都在重估收益 成本与撤离概率",40,"#172124",True)
+  c=row(f,["战前配装","进入战区","搜索取舍","接战或绕行","撤离判定","资产结算"],310,["确定成本 C","信息不完整","提高 V 与 G","改变 p 与消耗","出口与时机","成功保留 失败损失"])
+  for q,n in zip(c,c[1:]): f.line([(q[0]+q[2]//2,q[1]),(n[0]-n[2]//2,n[1])],w=5,arrow=True)
+  f.text(800,650,"价值越高 不一定越想继续打 技能也可能被用于避战",28,s["accent"],True,"mm"); f.save()
+  f=Fig(out/"delta-squad.png",s,"三人小队的任务缺口与工具补位"); f.text(70,70,"先列局面要完成的动作 再决定谁来补工具",40,"#172124",True)
+  data=[("确认枪线","侦察 视野 探头","露娜给局部线索 队友仍要处理未知角"),("穿过空地","烟幕 机动 分段通过","红狼帮助突破 但不消除第二条枪线"),("战后恢复","治疗 药品 安全位置","蜂医补生命值 不补护甲 弹药与站位"),("照看后路","装置 留人 声音信息","牧羊人增加处理步骤 对手仍可识别 绕行")]
+  for i,(a,b,c) in enumerate(data):
+   y=155+i*165; f.rect(90,y,485,y+110,s["soft"],s["accent"]); f.text(287,y+38,a,29,s["accent"],True,"mm"); f.text(287,y+79,b,19,"#526062",False,"mm"); f.line([(485,y+55),(620,y+55)],w=5,arrow=True); f.rect(620,y,1510,y+110); f.text(660,y+55,c,24)
+  f.save()
+  f=Fig(out/"delta-route.png",s,"满包撤离的两条假设路线"); f.text(70,70,"假设地形 不对应真实地图点位",34,"#172124",True)
+  f.rect(610,210,930,650,"#ccd5cf","#aab6b0"); f.text(770,430,"建筑遮挡",30,"#43504d",True,"mm"); f.rect(1160,170,1470,280,"#f0dddd","#bb7777"); f.text(1315,225,"疑似敌方枪线",25,"#8c4545",True,"mm"); f.rect(1210,650,1500,770,s["soft"],s["accent"]); f.text(1355,710,"撤离方向",30,s["accent"],True,"mm")
+  f.rect(90,170,350,290); f.text(220,215,"满包三人小队",28,s["accent"],True,"mm"); f.text(220,255,"一人受伤",22,"#5d686a",False,"mm"); f.line([(350,220),(1080,220),(1260,610)],w=7,arrow=True); f.text(750,165,"A 短但暴露",26,s["accent"],True,"mm"); f.line([(220,290),(220,720),(1160,720)],w=7,arrow=True,dash=True); f.text(650,775,"B 遮挡多 但出口和耗时未知",26,s["accent"],True,"mm"); f.line([(1180,275),(930,420)],"#a74c4c",5,True,True); f.save()
+ else:
+  f=Fig(out/"valorant-system.png",s,"标准爆破的系统全景"); f.text(70,70,"英雄技能建立在射击 地图 经济和回合目标之上",40,"#172124",True)
+  for k,(labs,tag) in enumerate([(["移动与停步","武器与护甲","声音与沟通"],"操作底盘"),(["地图枪线","区域控制","爆能器与时间"],"空间目标"),(["英雄选择","技能资源","队伍分工"],"角色工具")]): row(f,labs,145+k*225,[tag]*3)
+  f.text(800,835,"系统共同决定能看见什么 能走到哪里 何时必须行动",25,s["accent"],True,"mm"); f.save()
+  f=Fig(out/"valorant-cycle.png",s,"信息到执行的回合循环"); f.text(70,70,"技能不是终点 反馈必须重新进入计划",40,"#172124",True)
+  pts=[(300,230),(1100,230),(1100,620),(300,620)]; labs=[("信息","敌位 枪线 资源"),("计划","处理顺序与分工"),("执行","技能 移动 射击"),("反馈","击杀 退让 反制")]
+  for (x,y),(a,b) in zip(pts,labs): f.rect(x-190,y-75,x+190,y+75,"#fff",s["accent"]); f.text(x,y-20,a,34,s["accent"],True,"mm"); f.text(x,y+30,b,22,"#5d686a",False,"mm")
+  for a,b in [((490,230),(900,230)),((1100,305),(1100,545)),((910,620),(490,620)),((300,545),(300,305))]:f.line([a,b],w=7,arrow=True)
+  f.text(800,430,"Intel → Plan → Execute → Repeat",30,"#283337",True,"mm"); f.save()
+  f=Fig(out/"valorant-timeline.png",s,"三段条件的进点重叠窗口"); f.text(70,70,"假设秒数 只解释时序 不代表现行技能参数",34,"#172124",True); left,right=300,1500
+  for t in range(11): x=left+(right-left)*t/10; f.line([(x,170),(x,700)],"#d7dcda",2); f.text(x,145,str(t),18,"#6a7475",False,"mm")
+  for i,(name,a,b,c) in enumerate([("侦察信息",2,8,"#577d89"),("远线遮挡",3,7,"#8a6c91"),("队友跟进",4,6,s["accent"])]):
+   y=230+i*145; f.text(80,y+45,name,26,"#283337",True); x1=left+(right-left)*a/10; x2=left+(right-left)*b/10; f.rect(x1,y,x2,y+80,c,c,12); f.text((x1+x2)/2,y+40,f"{a} 至 {b} 秒",22,"#fff",True,"mm")
+  f.rect(780,680,1020,760,"#d3a34d","#d3a34d",10); f.text(900,720,"共同窗口 2 秒",23,"#fff",True,"mm"); f.save()
+  f=Fig(out/"valorant-postplant.png",s,"安装前后目标与时间压力反转"); f.text(70,70,"地图没变 必须主动解决问题的一方变了",40,"#172124",True)
+  for x,title,fill in [(80,"安装前","#fff"),(860,"安装后",s["soft"])]: f.rect(x,180,x+660,680,fill,s["accent"]); f.text(x+330,230,title,35,s["accent"],True,"mm")
+  for x,a,b,c,d in [(145,"进攻方","进入安装区 清枪线 付出时间","防守方","守住入口 延缓并消耗对手"),(925,"防守方","回到包点 拆除 承担时间压力","进攻方","守包 拖延 迫使对方主动进入")]: f.text(x,325,a,28,"#273234",True); f.text(x,375,b,23,"#596466"); f.text(x,490,c,28,"#273234",True); f.text(x,540,d,23,"#596466")
+  f.line([(740,430),(850,430)],w=8,arrow=True); f.save()
+
+
+def parse(path):
+ lines=path.read_text(encoding="utf-8").splitlines(); out=[]; i=0
+ while i<len(lines):
+  s=lines[i].rstrip()
+  if not s:i+=1;continue
+  if s.startswith("|"):
+   rows=[]
+   while i<len(lines) and lines[i].startswith("|"): rows.append([c.strip() for c in lines[i].strip("|").split("|")]);i+=1
+   if len(rows)>1 and all(re.fullmatch(r"[-: ]+",c or "-") for c in rows[1]):rows.pop(1)
+   out.append(("table",rows));continue
+  if s.startswith("!["):
+   out.append(("image",re.match(r"!\[(.*?)\]\((.*?)\)",s).groups()));i+=1;continue
+  m=re.match(r"^(#{1,3})\s+(.*)",s)
+  if m:out.append(("heading",(len(m[1]),m[2])));i+=1;continue
+  if re.match(r"^\d+\. ",s):out.append(("list",s));i+=1;continue
+  if s.startswith("- "):out.append(("bullet",s[2:]));i+=1;continue
+  p=[s];i+=1
+  while i<len(lines) and lines[i].strip() and not re.match(r"^(#{1,3})\s+|^\d+\. |^- |^\||^!\[",lines[i]):p.append(lines[i].strip());i+=1
+  out.append(("para"," ".join(p)))
+ return out
+
+
+def inline_doc(p,text):
+ pos=0
+ for m in re.finditer(r"https?://[^\s）]+",text):
+  p.add_run(text[pos:m.start()]); rid=p.part.relate_to(m.group(),"http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",is_external=True); link=OxmlElement("w:hyperlink");link.set(qn("r:id"),rid);run=OxmlElement("w:r");t=OxmlElement("w:t");t.text=m.group();run.append(t);link.append(run);p._p.append(link);pos=m.end()
+ p.add_run(text[pos:])
+
+
+def cell(c,text,header,accent):
+ c.vertical_alignment=WD_CELL_VERTICAL_ALIGNMENT.CENTER;p=c.paragraphs[0];p.paragraph_format.first_line_indent=Pt(0);p.paragraph_format.space_after=Pt(0);r=p.add_run(text);r.bold=header;r.font.size=Pt(8.5);r.font.color.rgb=RGBColor.from_string("FFFFFF" if header else "222222")
+ shd=OxmlElement("w:shd");shd.set(qn("w:fill"),accent.replace("#","") if header else "F5F6F5");c._tc.get_or_add_tcPr().append(shd)
+ mar=OxmlElement("w:tcMar")
+ for side in ("top","left","bottom","right"):e=OxmlElement("w:"+side);e.set(qn("w:w"),"100");e.set(qn("w:type"),"dxa");mar.append(e)
+ c._tc.get_or_add_tcPr().append(mar)
+
+
+def docx(s,blocks):
+ d=Document();sec=d.sections[0];sec.page_width=Mm(210);sec.page_height=Mm(297);sec.top_margin=sec.bottom_margin=Mm(19);sec.left_margin=sec.right_margin=Mm(23)
+ for name,font,size in [("Normal","宋体",10.5),("Title","黑体",24),("Heading 1","黑体",16),("Heading 2","黑体",12.5)]:st=d.styles[name];st.font.name="Times New Roman";st.font.size=Pt(size);st.font.color.rgb=RGBColor(0,0,0);st.element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:eastAsia"),font)
+ for b in d.styles.element.findall(".//"+qn("w:pBdr")):b.getparent().remove(b)
+ n=d.styles["Normal"].paragraph_format;n.line_spacing=1.45;n.space_after=Pt(6);n.first_line_indent=Pt(21);n.widow_control=True
+ for nm in ("Heading 1","Heading 2"):p=d.styles[nm].paragraph_format;p.space_before=Pt(15);p.space_after=Pt(7);p.keep_with_next=True;p.first_line_indent=Pt(0)
+ foot=sec.footer.paragraphs[0];foot.alignment=WD_ALIGN_PARAGRAPH.CENTER;fld=OxmlElement("w:fldSimple");fld.set(qn("w:instr"),"PAGE");foot._p.append(fld)
+ d.core_properties.title=s["title"];d.core_properties.subject=s["subtitle"];d.core_properties.author="";d.core_properties.last_modified_by=""
+ p=d.add_paragraph(style="Title");p.paragraph_format.space_before=Pt(58);p.add_run(s["title"]);p=d.add_paragraph();p.paragraph_format.first_line_indent=Pt(0);p.add_run(s["subtitle"]).font.size=Pt(13);p=d.add_paragraph();p.paragraph_format.first_line_indent=Pt(0);p.paragraph_format.space_before=Pt(18);p.add_run("玩法系统研究  2026 年 9 月").font.size=Pt(10);d.add_page_break();d.add_heading("目录",1)
+ for typ,data in blocks:
+  if typ=="heading" and data[0]==2:p=d.add_paragraph();p.paragraph_format.first_line_indent=Pt(0);p.paragraph_format.space_after=Pt(3);p.add_run(data[1])
+ d.add_page_break();images=0
+ for typ,data in blocks:
+  if typ=="heading":
+   if data[0]>1:d.add_heading(data[1],1 if data[0]==2 else 2)
+  elif typ=="para":
+   p=d.add_paragraph();inline_doc(p,data)
+   if data.startswith(("图 ","资料核对","来源：")):p.paragraph_format.first_line_indent=Pt(0);p.alignment=WD_ALIGN_PARAGRAPH.CENTER;p.paragraph_format.line_spacing=1.1
+  elif typ in ("list","bullet"):
+   p=d.add_paragraph(style="Normal" if typ=="list" else "List Bullet");p.paragraph_format.first_line_indent=Pt(0);p.paragraph_format.left_indent=Mm(7);inline_doc(p,data)
+  elif typ=="image":
+   p=d.add_paragraph();p.paragraph_format.first_line_indent=Pt(0);p.alignment=WD_ALIGN_PARAGRAPH.CENTER;pic=p.add_run().add_picture(str(ROOT/s["folder"]/data[1]),width=Mm(160));pic._inline.docPr.set("descr",data[0]);images+=1
+  elif typ=="table":
+   t=d.add_table(rows=len(data),cols=max(map(len,data)));t.autofit=False
+   for i,r in enumerate(data):
+    for j,v in enumerate(r):cell(t.cell(i,j),v,i==0,s["accent"])
+   t.rows[0]._tr.get_or_add_trPr().append(OxmlElement("w:tblHeader"));d.add_paragraph()
+ out=ROOT/s["folder"]/s["docx"];d.save(out);return out,images
+
+
+def inhtml(t):
+ e=html.escape(t);return re.sub(r"(https?://[^\s）]+)",r'<a href="\1">\1</a>',e)
+
+
+def webpage(s,blocks):
+ body=[];toc=[]
+ for typ,data in blocks:
+  if typ=="heading":
+   level,text=data
+   if level==1:continue
+   sid="sec-"+re.match(r"\d+",text).group() if level==2 and re.match(r"\d+",text) else ""
+   if level==2:toc.append((sid,text))
+   body.append(f'<h{level} id="{sid}">{html.escape(text)}</h{level}>')
+  elif typ=="para":body.append("<p>"+inhtml(data)+"</p>")
+  elif typ in ("list","bullet"):body.append(f'<p class="item"><span>•</span>{inhtml(data)}</p>')
+  elif typ=="image":body.append(f'<figure><a href="{Path(data[1]).with_suffix(".svg").as_posix()}"><img src="{Path(data[1]).with_suffix(".svg").as_posix()}" alt="{html.escape(data[0])}"></a></figure>')
+  elif typ=="table":body.append('<div class="table-wrap"><table><thead><tr>'+''.join('<th>'+inhtml(x)+'</th>' for x in data[0])+'</tr></thead><tbody>'+''.join('<tr>'+''.join('<td>'+inhtml(x)+'</td>' for x in r)+'</tr>' for r in data[1:])+'</tbody></table></div>')
+ nav=''.join(f'<a href="#{i}"><span>{n:02d}</span>{html.escape(t[3:])}</a>' for n,(i,t) in enumerate(toc,1))
+ css=f'''*{{box-sizing:border-box}}html{{scroll-behavior:smooth}}body{{margin:0;color:#202628;background:#f3f1ec;font:17px/1.9 "Songti SC","SimSun",serif}}a{{color:{s['accent']};text-underline-offset:3px}}.layout{{max-width:1260px;margin:auto;display:grid;grid-template-columns:270px minmax(0,850px);gap:54px;padding:54px 28px 100px}}aside{{position:sticky;top:22px;height:calc(100vh - 44px);overflow:auto;font:14px/1.5 "Microsoft YaHei",sans-serif}}aside h1{{font-size:20px;line-height:1.45;margin:0 0 12px}}aside p{{font-size:13px;color:#657071;line-height:1.7}}nav{{border-top:1px solid #cfd5d2;margin-top:22px;padding-top:12px}}nav a{{display:grid;grid-template-columns:28px 1fr;gap:8px;padding:7px 0;color:#344143;text-decoration:none}}nav span{{color:{s['accent']}}}main{{background:#fff;padding:64px 76px;box-shadow:0 14px 45px #35403c17}}.hero{{padding-bottom:42px;border-bottom:1px solid #d7dcda;margin-bottom:48px}}.eyebrow{{font:13px "Microsoft YaHei",sans-serif;color:{s['accent']};letter-spacing:.12em}}.hero h1{{font:700 37px/1.32 "Microsoft YaHei",sans-serif;margin:16px 0}}.hero p{{font-size:19px;color:#5a6566;text-indent:0}}.downloads a{{font:14px "Microsoft YaHei",sans-serif;margin-right:22px}}h2,h3{{font-family:"Microsoft YaHei",sans-serif;color:#172124;line-height:1.45}}h2{{font-size:26px;margin:58px 0 22px;padding-top:8px}}h3{{font-size:19px;margin:32px 0 12px}}p{{margin:0 0 17px;text-indent:2em}}.item{{text-indent:0;padding-left:25px;position:relative}}.item span{{position:absolute;left:0;color:{s['accent']}}}figure{{margin:34px -28px 12px}}figure img{{display:block;width:100%}}.table-wrap{{overflow:auto;margin:26px 0 34px}}table{{border-collapse:collapse;width:100%;font:14px/1.55 "Microsoft YaHei",sans-serif}}th,td{{border:1px solid #d8dddb;padding:12px 13px;text-align:left;vertical-align:top}}th{{background:{s['accent']};color:white}}tbody tr:nth-child(even){{background:#f5f6f5}}footer{{margin-top:60px;padding-top:22px;border-top:1px solid #d7dcda;font-size:13px;color:#687172}}@media(max-width:900px){{.layout{{display:block;padding:0}}aside{{position:static;height:auto;padding:25px}}aside nav{{display:none}}main{{padding:38px 22px;box-shadow:none}}figure{{margin:28px 0}}.hero h1{{font-size:30px}}}}@media print{{body{{background:#fff}}aside{{display:none}}.layout{{display:block;padding:0}}main{{box-shadow:none;padding:15mm}}.downloads{{display:none}}h2{{break-after:avoid}}figure,.table-wrap{{break-inside:avoid}}}}'''
+ page=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(s['title'])}</title><style>{css}</style></head><body><div class="layout"><aside><h1>{html.escape(s['title'])}</h1><p>{html.escape(s['subtitle'])}</p><nav>{nav}</nav></aside><main><header class="hero"><div class="eyebrow">GAMEPLAY SYSTEM STUDY · 2026</div><h1>{html.escape(s['title'])}</h1><p>{html.escape(s['subtitle'])}</p><div class="downloads"><a href="{quote(s['pdf'])}">下载 PDF</a><a href="{quote(s['docx'])}">下载 Word</a><a href="正文.md">查看正文</a><a href="信息来源汇总.md">信息来源</a></div></header>{''.join(body)}<footer>本文用于游戏策划作品集。规则事实、历史改动、本文推演与待验证方案分别标注。</footer></main></div></body></html>'''
+ out=ROOT/s["folder"]/s["html"];out.write_text(page,encoding="utf-8");return out
+
+
+def sources(kind,s):
+ if kind=="delta":rows=[("D0","Garena Operations Mode 101","https://deltaforce.garena.com/en/news/system/RMDWVM","2026-02-20；模式循环、仓库、任务、配装、弹甲、声音与撤离。"),("D1","Garena 模式与红狼介绍","https://deltaforce.garena.com/en/?redirect=0","三人小队、四类职能与代表技能。"),("D2","Starfall 更新公告","https://deltaforce.garena.com/en/news/announcement/H3T8DS","2025-01；蜂医、露娜、威龙双模式历史案例。"),("D3","Break 更新公告","https://deltaforce.garena.com/en/news/announcement/V6J38U","2025-07-08；牧羊人陷阱提示与反制。"),("D4","干员平衡说明","https://deltaforce.garena.com/en/news/all/A7WYBP","2026-07-10；道具密度、单向信息与枪战可读性。")]
+ else:rows=[("V1","Riot How we balance VALORANT","https://playvalorant.com/en-us/news/dev/how-we-balance-valorant/","2020-06-26；战术循环。"),("V2","Riot Beginner's Guide","https://playvalorant.com/en-us/news/announcements/beginners-guide/","2024-08-02；英雄、回合、经济、武器与地图。"),("V3","Sova 官方页","https://playvalorant.com/en-us/agents/sova/","侦察箭判定。"),("V4","Omen 官方页","https://playvalorant.com/en-us/agents/omen/","烟雾机制。"),("V5","Cypher 官方页","https://playvalorant.com/en-us/agents/cypher/","绊线机制。"),("V6","4.08 版本说明","https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-4-08/","Jett 历史调整。"),("V7","7.04 版本说明","https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-7-04/","Jett 历史调整。"),("V8","9.10 版本说明","https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-9-10/","Omen 烟雾几何约束。"),("V9","Valve CS2","https://www.counter-strike.net/cs2","Responsive Smokes 横向比较。")]
+ text=f"# {s['title']} 信息来源\n\n资料核对：2026-09-10。历史参数不作当前版本攻略。\n\n| 编号 | 来源 | 日期与用途 |\n|---|---|---|\n"+''.join(f'| {k} | [{t}]({u}) | {d} |\n' for k,t,u,d in rows)
+ text+="""\n## 证据边界\n\n- 官方资料只支撑相应机制事实；推演、评价与建议是本文判断。\n- 自绘图不是实机截图；假设秒数、概率、价值单位与路线不是实测。\n- 未采集用户实战、访谈、胜率或后台日志；待验证方案没有写成测试结果。\n- 历史地区公告只证明对应地区与日期，不自动证明国服当前参数。\n\n## 知识库与版式参考\n\n按需参考 game-system-design-kb 的 00 方法论、01 战斗系统和 03 经济系统。参考用户指定公开拆解的信息层级、目录导航和图文关系，没有复制其正文、截图或图表。\n"""
+ (ROOT/s["folder"]/"信息来源汇总.md").write_text(text,encoding="utf-8")
+
+
+def main():
+ a=argparse.ArgumentParser();a.add_argument("--reset-source",action="store_true");args=a.parse_args()
+ if args.reset_source:rebuild()
+ for kind,s in SPECS.items():
+  figures(kind,s);blocks=parse(ROOT/s["folder"]/"正文.md");d,n=docx(s,blocks);h=webpage(s,blocks);sources(kind,s);print(kind,len(blocks),n,d.name,h.name)
+
+if __name__=="__main__":main()
