@@ -25,3 +25,8 @@
 - 许可：https://creativecommons.org/publicdomain/zero/1.0/
 
 音效文件已截取为适合网页实时播放的单发版本，没有直接使用商业游戏的专有录音。
+
+## 当前正式版补充
+
+- `rebuild/assets/vertex-training-campus.png`：为本项目生成的原创训练中心标题画面，不含第三方游戏品牌、角色或标识。
+- 正式版实机场景、机器人、枪械与手臂由 Three.js 几何体实时绘制；上面列出的旧版 CC0 模型仍保留在仓库中，但不再由正式入口加载。

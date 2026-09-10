@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="VERTEX 顶点训练中心：按原始策划案重构的五关低多边形 FPS Demo"><title>VERTEX / 顶点训练中心</title><link rel="stylesheet" href="style.css?v=20260906-1"></head>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="VERTEX 顶点训练中心：五关制第一人称射击训练 Demo"><title>VERTEX / 顶点训练中心</title><link rel="stylesheet" href="style.css?v=20260911-2"></head>
 <body>
 <canvas id="viewport" aria-label="第一人称训练场"></canvas>
 <div id="loading"><span class="eyebrow">VERTEX TRAINING CENTER</span><h1>正在准备训练场</h1><p id="load-message">装载原始关卡与数值…</p></div>
 <section id="menu" class="screen hidden">
  <div class="brand"><span class="brand-mark">V</span><span>VERTEX<small>顶点训练中心 / 2050</small></span></div>
- <div class="menu-card"><span class="eyebrow">SHOOT. LEARN. RETRY.</span><h1>每次重来，<br>离顶点近一点。</h1><p class="intro">五场短关卡认证。用更准的枪法、更少的受击，刷新自己的最好成绩。</p>
+ <div class="menu-card"><span class="eyebrow">2050 / CIVILIAN CERTIFICATION</span><h1>五场认证，<br>练到动作干净。</h1><p class="intro">从手枪定点清除，到三武器综合撤离。成绩只看三件事：速度、命中和生存。</p>
  <div class="menu-actions"><button id="continue" class="primary">开始训练 <span>→</span></button><button id="open-settings">操作与设置</button></div>
- <div id="levels" class="level-list"></div><p class="fine">PC 键鼠体验 · 成绩仅保存在此浏览器 · 重构测试版 20260906.1</p>
- </div><aside class="menu-note"><b>三种武器。三种节奏。</b><p>手枪点射 / 步枪压枪 / 霰弹近战</p><span>时间 50%　命中 30%　生存 20%</span></aside>
+ <div id="levels" class="level-list"></div><p class="fine">PC 键鼠体验 · 成绩仅保存在此浏览器 · Demo 20260911.1</p>
+ </div><aside class="menu-note"><small>训练提示 / 01</small><b>别把三把枪打成一种节奏。</b><p>手枪等准星复位，步枪控制连射，霰弹贴近再开火。</p><span>评分权重　时间 50% / 命中 30% / 生存 20%</span></aside>
 </section>
 <section id="hud" class="hidden">
  <div class="hud-objective"><span id="level-name"></span><strong id="objective"></strong><small id="stage"></small></div>
@@ -30,4 +30,4 @@
  <div class="controls"><span>WASD 移动</span><span>左键 射击</span><span>右键 瞄准</span><span>R 换弹</span><span>1 / 2 / 3 切枪</span><span>Shift 冲刺</span><span>空格 跳跃</span><span>Esc 暂停</span></div><p class="fine">手枪、霰弹枪每按一次射击一次；步枪可按住连射。切枪或射击可取消换弹，未完成的换弹不增加弹药。</p><button id="close-settings" class="primary">保存并返回</button><button id="reset-settings">恢复默认设置</button></div></section>
 <section id="result" class="modal hidden"><div class="panel result-panel"><span class="eyebrow" id="result-label"></span><h2 id="result-title"></h2><div class="result-main"><strong id="grade"></strong><div><b id="score"></b><small id="record"></small></div></div><div id="score-parts"></div><p id="result-details"></p><div class="result-actions"><button id="retry-result" class="primary">再挑战一次 ↻</button><button id="next-level">下一关 →</button><button id="result-menu">返回选关</button></div></div></section>
 <script>window.addEventListener('error',()=>{const loading=document.getElementById('loading');if(!loading.classList.contains('hidden'))document.getElementById('load-message').textContent='页面资源未加载完整。请按 Ctrl + F5 刷新，并确认通过网站链接打开。';});</script>
-<script type="module" src="app.mjs?v=20260906-1"></script></body></html>
+<script type="module" src="app.mjs?v=20260911-2"></script></body></html>

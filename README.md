@@ -13,12 +13,12 @@
 
 ## 04｜《顶点射手》可玩 Demo
 
-一个可以直接在浏览器运行的训练关卡原型，包含移动、射击、三把武器、三类机器人、评分结算与快速重开。
+一个可以直接在浏览器运行的五关训练原型，包含三把武器、三类机器人、主路与侧翼、撤离、评分结算与快速重开。
 
 - [在线试玩 Demo](https://3323098520.github.io/game-design-portfolio/04%20vertex-demo/)
 - [Demo 源码](./04%20vertex-demo/index.html)
 - [Demo 说明](./04%20vertex-demo/README.md)
-- [Demo 数值配置](./04%20vertex-demo/data/vertex-config.json)
+- [Demo 原始数值配置](./01%20PORTFOLIO_VERTEX/data/)
 
 ## 02｜《三角洲行动》玩法分析
 
